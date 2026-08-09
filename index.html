@@ -3,173 +3,195 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NURA - Start</title>
+  <title>NURA - Heisei * Jumino</title>
   <style>
     body {
-      background: #050505;
-      color: #fff;
-      font-family: 'Courier New', monospace;
+      background-color: #f4ebe1; 
+      background-image: radial-gradient(#e3d5ca 2px, transparent 2px);
+      background-size: 16px 16px;
+      color: #6b5b52;
+      font-family: 'MS Gothic', 'Courier New', monospace;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
     }
+
     .main-frame {
       width: 100%;
       max-width: 440px;
-      background: #0a0a0a;
-      border: 1px solid #1a1a1a;
-      padding: 30px;
+      background: #fffdf9;
+      border: 4px double #b7b7a4; 
+      padding: 25px;
       box-sizing: border-box;
-      border-radius: 8px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+      border-radius: 4px;
+      box-shadow: 6px 6px 0px #ddbea9;
+      position: relative;
     }
     
-    /* ТЕКСТОВЫЙ ЛОГОТИП С КРУТЫМ СВЕЧЕНИЕМ */
     .brand-logo {
       text-align: center;
-      font-size: 32px;
+      font-size: 34px;
       font-weight: bold;
-      letter-spacing: 6px;
+      letter-spacing: 4px;
       margin-bottom: 25px;
-      color: #00f0ff;
-      /* Многослойное неоновое свечение */
-      text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 20px #00a8b5;
+      color: #a3b18a; 
+      text-shadow: 
+        0 0 4px #fff,
+        0 0 8px #a3b18a, 
+        0 0 15px #cbd5e1;
+      animation: float 3s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
     }
 
     .search-container {
       position: relative;
       margin-bottom: 25px;
     }
+
     .search-box {
       display: flex;
       align-items: center;
-      background: #111;
-      border: 1px solid #222;
-      padding: 5px 10px;
-      border-radius: 4px;
-      /* Голубое свечение для поиска */
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
-      transition: box-shadow 0.3s ease;
+      background: #fcfaf2;
+      border: 2px solid #cb997e;
+      padding: 6px 10px;
+      border-radius: 0px; 
+      box-shadow: inset 2px 2px 0px rgba(0,0,0,0.05);
     }
     .search-box:focus-within {
-      border-color: #00f0ff;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+      border-color: #a3b18a;
+      box-shadow: 0 0 8px rgba(163, 177, 138, 0.5);
     }
     .search-icon {
       margin-right: 8px;
+      font-size: 14px;
+      filter: sepia(0.5);
     }
     #search-input {
       flex: 1;
       background: transparent;
       border: none;
-      color: #fff;
+      color: #6b5b52;
       font-family: inherit;
+      font-size: 13px;
       outline: none;
     }
+    #search-input::placeholder {
+      color: #b7b7a4;
+    }
+
     #search-btn {
-      background: #00f0ff;
-      border: none;
-      color: #000;
+      background: #cb997e;
+      border: 1px solid #a5a58d;
+      color: #fff;
+      font-size: 11px;
       font-weight: bold;
-      padding: 4px 10px;
+      padding: 4px 12px;
       cursor: pointer;
-      box-shadow: 0 0 8px #00f0ff;
-      transition: 0.2s;
+      box-shadow: 2px 2px 0px #6b5b52;
+      transition: 0.1s;
     }
     #search-btn:hover {
-      background: #fff;
-      box-shadow: 0 0 15px #fff;
+      background: #a3b18a;
+      box-shadow: 1px 1px 0px #6b5b52;
+      transform: translate(1px, 1px);
     }
+
     .suggestions-menu {
       position: absolute;
-      top: 40px;
+      top: 42px;
       left: 0;
       width: 100%;
-      background: #0d0d0d;
-      border: 1px solid #00f0ff;
-      box-shadow: 0 5px 15px rgba(0,240,255,0.3);
+      background: #fffdf9;
+      border: 2px solid #cb997e;
+      box-shadow: 4px 4px 0px #ddbea9;
       z-index: 100;
-      border-radius: 4px;
       box-sizing: border-box;
     }
     .suggest-item {
-      padding: 10px;
+      padding: 8px 12px;
       cursor: pointer;
-      font-size: 13px;
-      border-bottom: 1px solid #222;
+      font-size: 12px;
+      color: #6b5b52;
+      border-bottom: 1px dashed #e3d5ca;
     }
     .suggest-item:hover {
-      background: #15222e;
-      color: #00f0ff;
+      background: #f4ebe1;
+      color: #a3b18a;
     }
     
-    /* ИСПРАВЛЕННЫЙ БЛОК РЕГИСТРАЦИИ (БЕЗ МЕРЗКОГО ЦВЕТА) */
     .cyber-gate {
       text-align: center;
-      border: 1px solid #ff0055;
+      border: 2px dashed #a3b18a;
       padding: 20px;
-      background: #000000; /* Чистый глубокий черный вместо бордового */
-      box-shadow: 0 0 15px rgba(255, 0, 85, 0.15); /* Мягкое внешнее свечение формы */
+      background: #f7f9f4; 
     }
-    
-    /* РОЗОВОЕ НЕОНОВОЕ СВЕЧЕНИЕ ДЛЯ АЛЕРТА */
     .gate-title {
-      color: #ff0055;
+      color: #6b5b52;
       font-weight: bold;
-      font-size: 18px;
-      letter-spacing: 2px;
+      font-size: 13px;
+      letter-spacing: 1px;
       margin-bottom: 15px;
-      text-shadow: 0 0 5px #ff0055, 0 0 12px #ff0055;
     }
     
     .field-wrap {
       display: flex;
       align-items: center;
-      background: #111;
-      border: 1px solid #222;
-      margin-top: 10px;
-      padding: 5px 10px;
-      transition: 0.2s;
+      background: #ffffff;
+      border: 1px solid #b7b7a4;
+      margin-top: 8px;
+      padding: 6px 10px;
     }
     .field-wrap:focus-within {
-      border-color: #ff0055;
-      box-shadow: 0 0 8px rgba(255, 0, 85, 0.3);
+      border-color: #cb997e;
     }
     .prefix {
-      color: #ff0055;
+      color: #a3b18a;
       font-size: 11px;
-      margin-right: 8px;
+      font-weight: bold;
+      margin-right: 6px;
     }
     .field-wrap input {
       width: 100%;
       background: transparent;
       border: none;
-      color: #fff;
+      color: #6b5b52;
       font-family: inherit;
       outline: none;
+      font-size: 12px;
     }
     #bday {
-      color-scheme: dark;
+      color-scheme: light;
     }
+
     #reg-go {
-      background: #ff0055;
-      border: none;
-      color: #fff;
+      background: #ffe3e0;
+      border: 2px solid #ffb3a7;
+      color: #ff758f;
       padding: 10px;
       width: 100%;
       margin-top: 15px;
       cursor: pointer;
       font-weight: bold;
-      box-shadow: 0 0 10px #ff0055;
-      transition: 0.2s;
+      font-size: 12px;
+      font-family: inherit;
+      box-shadow: 3px 3px 0px #ffb3a7;
+      transition: 0.1s;
     }
     #reg-go:hover {
-      background: #fff;
-      color: #000;
-      box-shadow: 0 0 18px #fff;
+      background: #ffb3a7;
+      color: #fff;
     }
+    #reg-go:active {
+      transform: translate(3px, 3px);
+      box-shadow: none;
+    }
+
     .hidden {
       display: none !important;
     }
@@ -178,40 +200,37 @@
 <body>
 
   <div class="main-frame">
-    <!-- ЛОГОТИП СИСТЕМЫ (Виден всегда) -->
-    <div class="brand-logo">NURA</div>
+    <div class="brand-logo">*(o.o)* NURA ✧</div>
 
-    <!-- ПОИСКОВАЯ СТРОКА С ПОДСКАЗКАМИ -->
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="search-input" placeholder="Search the internet..." autocomplete="off">
+        <input type="text" id="search-input" placeholder="Search logs..." autocomplete="off">
         <button id="search-btn">GO</button>
       </div>
       <div id="suggestions" class="suggestions-menu hidden">
-        <div class="suggest-item">hatsune miku</div>
-        <div class="suggest-item">creepy story</div>
-        <div class="suggest-item">kaomoji</div>
-        <div class="suggest-item">cat</div>
+        <div class="suggest-item">✦ hatsune miku</div>
+        <div class="suggest-item">✦ creepy story</div>
+        <div class="suggest-item">✦ kaomoji</div>
+        <div class="suggest-item">✦ cat</div>
       </div>
     </div>
 
-    <!-- РЕГИСТРАЦИЯ (Скроется автоматически, если юзер уже заходил) -->
     <div id="reg-form" class="cyber-gate">
-      <div class="gate-title">ACCESS DENIED</div>
+      <div class="gate-title">ヘ( ^o^)/ STATE YOUR IDENTITY</div>
       <div class="field-wrap">
-        <span class="prefix">> CODENAME:</span>
-        <input type="text" id="nick" placeholder="Enter nickname...">
+        <span class="prefix">NICK_</span>
+        <input type="text" id="nick" placeholder="...">
       </div>
       <div class="field-wrap">
-        <span class="prefix">> PASSWORD:</span>
+        <span class="prefix">PASS_</span>
         <input type="password" id="pass" placeholder="••••••••">
       </div>
       <div class="field-wrap">
-        <span class="prefix">> BIRTHDAY:</span>
+        <span class="prefix">DATE_</span>
         <input type="date" id="bday">
       </div>
-      <button id="reg-go">INITIALIZE LOGIN</button>
+      <button id="reg-go">[ INITIALIZE LOGIN ]</button>
     </div>
   </div>
 
@@ -223,7 +242,6 @@
     const nickInput = document.getElementById('nick');
     const regForm = document.getElementById('reg-form');
 
-    // ПРОВЕРКА ПРИ ЗАГРУЗКЕ СТРАНИЦЫ: Если имя уже есть в базе, прячем форму
     if (localStorage.getItem('nura_username')) {
       regForm.classList.add('hidden');
     }
@@ -247,7 +265,7 @@
 
     document.querySelectorAll('.suggest-item').forEach(item => {
       item.addEventListener('click', () => {
-        sInp.value = item.textContent;
+        sInp.value = item.textContent.replace('✦ ', '');
         sugMenu.classList.add('hidden');
       });
     });
@@ -269,11 +287,11 @@
       const pass = document.getElementById('pass').value;
       const bday = document.getElementById('bday').value;
       if (!name || !pass || !bday) {
-        alert('Fill all fields!');
+        alert('(X.X) Fill all fields, please!');
         return;
       }
       localStorage.setItem('nura_username', name);
-      alert('Identity Saved!');
+      alert('✧ Saved! Welcome to NURA ✧');
       regForm.classList.add('hidden');
     });
   </script>
