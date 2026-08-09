@@ -5,89 +5,253 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NURA</title>
     <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+        }
         body {
-            background-color: #0d1117;
-            color: #c9d1d9;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            overflow-x: hidden;
         }
-        .container {
+        .hidden { display: none !important; }
+        
+        /* Auth Card */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            width: 350px;
             text-align: center;
         }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
-        p {
-            font-size: 1.2rem;
-            color: #8b949e;
-            margin-bottom: 30px;
-        }
-        .search-box {
-            position: relative;
-            display: inline-block;
-        }
-        input[type="text"] {
-            background-color: #161b22;
-            border: 1px solid #30363d;
+        h2 { margin-top: 0; font-weight: 600; letter-spacing: 1px; }
+        input, select {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            color: #c9d1d9;
-            padding: 10px 15px;
-            font-size: 1rem;
-            width: 300px;
+            color: var(--text-color);
+            padding: 10px;
+            font-size: 0.9rem;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 15px;
             outline: none;
-            transition: border-color 0.2s;
         }
-        input[type="text"]:focus {
-            border-color: #58a6ff;
-        }
+        input:focus, select:focus { border-color: var(--accent-color); }
         button {
             background-color: #21262d;
-            border: 1px solid #30363d;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            color: #c9d1d9;
+            color: var(--text-color);
             padding: 10px 20px;
             font-size: 1rem;
             cursor: pointer;
-            margin-left: 10px;
-            transition: background-color 0.2s;
+            width: 100%;
+            transition: 0.2s;
         }
-        button:hover {
-            background-color: #30363d;
-            border-color: #8b949e;
+        button:hover { background-color: var(--border-color); }
+        
+        /* Cat Facts Box */
+        .privacy-box {
+            background: #090d13;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            line-height: 1.4;
         }
+
+        /* Main Dashboard */
+        .dashboard {
+            display: flex;
+            gap: 20px;
+            max-width: 800px;
+            width: 90%;
+        }
+        .profile-side { width: 250px; }
+        .search-side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        
+        .avatar-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #21262d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 15px;
+            border: 2px solid var(--border-color);
+            overflow: hidden;
+        }
+        
+        .edit-zone { font-size: 0.85rem; text-align: left; margin-top: 15px; }
+        .edit-zone label { display: block; margin-bottom: 5px; color: #8b949e; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>NURA</h1>
-    <p>一癖あるインターネット — An internet with a twist.</p>
+<!-- STEP 1: FAKE REGISTRATION WITH CAT FACTS -->
+<div id="authScreen" class="card">
+    <h2>JOIN NURA</h2>
+    <p style="color: #8b949e; font-size: 0.85rem; margin-top: -10px;">An internet with a twist.</p>
     
-    <div class="search-box">
-        <input type="text" id="query" placeholder="SEARCH...">
-        <button onclick="executeSearch()">GO</button>
+    <input type="text" id="regNick" placeholder="Create your nickname" required>
+    <input type="password" id="regPass" placeholder="Create secret password" required>
+    
+    <div style="text-align: left; font-size: 0.85rem; color: #8b949e; margin-bottom: 5px;">Date of Birth:</div>
+    <input type="date" id="regBirth" required>
+    
+    <!-- Cat Fact Area -->
+    <div class="privacy-box" id="catFactBox">
+        <strong>🐱 RANDOM CAT FACT:</strong><br>
+        <span id="factText">Loading dynamic cat data...</span>
+    </div>
+    
+    <button onclick="handleRegister()">SIGN UP</button>
+</div>
+
+<!-- STEP 2: MAIN SITE INTERFACE -->
+<div id="mainScreen" class="dashboard hidden">
+    <!-- Left Profile Control -->
+    <div class="card profile-side">
+        <div class="avatar-img" id="userAvatar">🌀</div>
+        <h3 id="userNickName" style="margin: 0 0 5px 0;">User</h3>
+        <p id="userBitStatus" style="font-size: 0.85rem; color: var(--accent-color); margin: 0 0 20px 0;">Bit: Standard</p>
+        
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 15px 0;">
+        
+        <div class="edit-zone">
+            <label>Change Name:</label>
+            <input type="text" id="editName" oninput="updateProfile()">
+            
+            <label>Choose Avatar (Emoji):</label>
+            <select id="editAvatar" onchange="updateProfile()">
+                <option value="🌀">🌀 Vortex</option>
+                <option value="👾">👾 Glitch</option>
+                <option value="🦊">🦊 Kitsune</option>
+                <option value="👁️">👁️ Eye</option>
+                <option value="💾">💾 Cyber</option>
+                <option value="🐈">🐈 Neko</option>
+            </select>
+            
+            <label>Configure Your Bit:</label>
+            <select id="editBit" onchange="updateProfile()">
+                <option value="Standard">Standard Bit</option>
+                <option value="Lo-Fi 808">Lo-Fi 808</option>
+                <option value="Synthwave">Synthwave Bass</option>
+                <option value="Noise Core">Noise Core</option>
+                <option value="Overclocked">Overclocked</option>
+            </select>
+        </div>
+        <button onclick="handleLogout()" style="margin-top: 20px; font-size: 0.8rem; padding: 5px;">LOGOUT</button>
+    </div>
+
+    <!-- Right Search Area -->
+    <div class="search-side">
+        <h1 style="font-size: 4rem; margin: 0 0 10px 0; letter-spacing: 3px;">NURA</h1>
+        <p style="color: #8b949e; margin-bottom: 30px;">一癖あるインターネット — An internet with a twist.</p>
+        
+        <div style="display: flex; width: 100%; max-width: 450px;">
+            <input type="text" id="searchQuery" placeholder="SEARCH THE TWIST..." style="margin-bottom: 0; border-radius: 6px 0 0 6px;">
+            <button onclick="triggerSearch()" style="width: auto; border-radius: 0 6px 6px 0; border-left: none; background: #21262d;">GO</button>
+        </div>
     </div>
 </div>
 
 <script>
-    function executeSearch() {
-        const query = document.getElementById('query').value;
-        if (query.trim() !== "") {
-            window.location.href = "https://google.com" + encodeURIComponent(query);
+    // List of fun cat facts
+    const catFacts = [
+        "Cats sleep for 70% of their lives. That's a lot of dreaming.",
+        "A cat's purr vibrates at a frequency that can actually stimulate bone and tissue regeneration.",
+        "The first cat in space was a French cat named Félicette in 1963. She survived the trip!",
+        "Cats have 32 muscles in each ear, allowing them to rotate them 180 degrees independently.",
+        "A cat cannot taste sweetness. They completely lack the sugar taste receptors.",
+        "Every cat's nose print is completely unique, just like a human fingerprint.",
+        "Cats make about 100 different vocal sounds. Dogs only make about 10."
+    ];
+
+    window.onload = function() {
+        // Show random cat fact
+        const randomFact = catFacts[Math.floor(Math.random() * catFacts.length)];
+        document.getElementById('factText').innerText = randomFact;
+
+        // Check login status
+        const savedUser = localStorage.getItem('nura_user');
+        if (savedUser) {
+            loadDashboard(JSON.parse(savedUser));
+        }
+    };
+
+    function handleRegister() {
+        const nick = document.getElementById('regNick').value.trim();
+        const pass = document.getElementById('regPass').value;
+        const birth = document.getElementById('regBirth').value;
+
+        if(!nick || !pass || !birth) {
+            alert("Fill all fields to enter NURA.");
+            return;
+        }
+
+        const userData = { username: nick, avatar: "🌀", bit: "Standard" };
+        localStorage.setItem('nura_user', JSON.stringify(userData));
+        loadDashboard(userData);
+    }
+
+    function loadDashboard(data) {
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('mainScreen').classList.remove('hidden');
+        
+        document.getElementById('userNickName').innerText = data.username;
+        document.getElementById('userAvatar').innerText = data.avatar;
+        document.getElementById('userBitStatus').innerText = "Bit: " + data.bit;
+        
+        document.getElementById('editName').value = data.username;
+        document.getElementById('editAvatar').value = data.avatar;
+        document.getElementById('editBit').value = data.bit;
+    }
+
+    function updateProfile() {
+        const newName = document.getElementById('editName').value.trim() || "User";
+        const newAvatar = document.getElementById('editAvatar').value;
+        const newBit = document.getElementById('editBit').value;
+
+        document.getElementById('userNickName').innerText = newName;
+        document.getElementById('userAvatar').innerText = newAvatar;
+        document.getElementById('userBitStatus').innerText = "Bit: " + newBit;
+
+        const updatedData = { username: newName, avatar: newAvatar, bit: newBit };
+        localStorage.setItem('nura_user', JSON.stringify(updatedData));
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('nura_user');
+        location.reload(); // Reload to get a new cat fact on logout
+    }
+
+    function triggerSearch() {
+        const q = document.getElementById('searchQuery').value;
+        if (q.trim() !== "") {
+            window.location.href = "https://google.com" + encodeURIComponent(q);
         }
     }
-    
-    document.getElementById('query').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            executeSearch();
-        }
+
+    document.getElementById('searchQuery').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') triggerSearch();
     });
 </script>
 
