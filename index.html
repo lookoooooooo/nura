@@ -22,18 +22,20 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
             overflow-x: hidden;
         }
         .hidden { display: none !important; }
-        
-        /* Auth Card */
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 30px;
-            width: 350px;
+            width: 100%;
+            max-width: 350px;
             text-align: center;
+            box-sizing: border-box;
         }
         h2 { margin-top: 0; font-weight: 600; letter-spacing: 1px; }
         input, select {
@@ -61,30 +63,49 @@
             transition: 0.2s;
         }
         button:hover { background-color: var(--border-color); }
-        
-        /* Cat Facts Box */
-        .privacy-box {
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 340px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .cat-fact-text {
             background: #090d13;
             border: 1px solid var(--border-color);
-            padding: 12px;
-            text-align: left;
-            font-size: 0.85rem;
-            color: #8b949e;
-            margin-bottom: 15px;
+            padding: 15px;
             border-radius: 6px;
+            font-size: 0.9rem;
+            color: #8b949e;
+            margin: 20px 0;
+            text-align: left;
             line-height: 1.4;
+            word-wrap: break-word;
         }
-
-        /* Main Dashboard */
         .dashboard {
             display: flex;
+            flex-direction: row;
             gap: 20px;
             max-width: 800px;
-            width: 90%;
+            width: 100%;
+            box-sizing: border-box;
         }
-        .profile-side { width: 250px; }
-        .search-side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        
+        .profile-side { width: 260px; flex-shrink: 0; }
+        .search-side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .avatar-img {
             width: 100px;
             height: 100px;
@@ -96,49 +117,48 @@
             font-size: 3rem;
             margin: 0 auto 15px;
             border: 2px solid var(--border-color);
-            overflow: hidden;
         }
-        
         .edit-zone { font-size: 0.85rem; text-align: left; margin-top: 15px; }
         .edit-zone label { display: block; margin-bottom: 5px; color: #8b949e; }
+        @media (max-width: 600px) {
+            .dashboard { flex-direction: column; align-items: center; }
+            .profile-side { width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-<!-- STEP 1: FAKE REGISTRATION WITH CAT FACTS -->
 <div id="authScreen" class="card">
     <h2>JOIN NURA</h2>
     <p style="color: #8b949e; font-size: 0.85rem; margin-top: -10px;">An internet with a twist.</p>
-    
     <input type="text" id="regNick" placeholder="Create your nickname" required>
     <input type="password" id="regPass" placeholder="Create secret password" required>
-    
     <div style="text-align: left; font-size: 0.85rem; color: #8b949e; margin-bottom: 5px;">Date of Birth:</div>
     <input type="date" id="regBirth" required>
-    
-    <!-- Cat Fact Area -->
-    <div class="privacy-box" id="catFactBox">
-        <strong>🐱 RANDOM CAT FACT:</strong><br>
-        <span id="factText">Loading dynamic cat data...</span>
-    </div>
-    
-    <button onclick="handleRegister()">SIGN UP</button>
+    <button onclick="openContinueModal()">SIGN UP</button>
 </div>
 
-<!-- STEP 2: MAIN SITE INTERFACE -->
+<div id="continueModal" class="modal-overlay hidden">
+    <div class="modal-box">
+        <h3 style="margin-top: 0; color: var(--accent-color); letter-spacing: 1px;">CONTINUE?</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 0; color: #c9d1d9;">Mandatory data to proceed:</p>
+        <div class="cat-fact-text">
+            <strong style="color: #ffda6a; display: block; margin-bottom: 5px;">🐱 CAT FACT:</strong>
+            <span id="modalFactText">Fetching cat data...</span>
+        </div>
+        <button onclick="confirmRegistration()" style="background: #238636; border-color: #2ea44f; margin-bottom: 10px;">YES, ENTER</button>
+        <button onclick="closeContinueModal()" style="background: transparent; border-color: transparent; color: #8b949e; font-size: 0.85rem; padding: 5px;">Cancel</button>
+    </div>
+</div>
 <div id="mainScreen" class="dashboard hidden">
-    <!-- Left Profile Control -->
     <div class="card profile-side">
         <div class="avatar-img" id="userAvatar">🌀</div>
-        <h3 id="userNickName" style="margin: 0 0 5px 0;">User</h3>
+        <h3 id="userNickName" style="margin: 0 0 5px 0; word-break: break-all;">User</h3>
         <p id="userBitStatus" style="font-size: 0.85rem; color: var(--accent-color); margin: 0 0 20px 0;">Bit: Standard</p>
-        
         <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 15px 0;">
-        
         <div class="edit-zone">
             <label>Change Name:</label>
             <input type="text" id="editName" oninput="updateProfile()">
-            
             <label>Choose Avatar (Emoji):</label>
             <select id="editAvatar" onchange="updateProfile()">
                 <option value="🌀">🌀 Vortex</option>
@@ -148,7 +168,6 @@
                 <option value="💾">💾 Cyber</option>
                 <option value="🐈">🐈 Neko</option>
             </select>
-            
             <label>Configure Your Bit:</label>
             <select id="editBit" onchange="updateProfile()">
                 <option value="Standard">Standard Bit</option>
@@ -158,14 +177,12 @@
                 <option value="Overclocked">Overclocked</option>
             </select>
         </div>
-        <button onclick="handleLogout()" style="margin-top: 20px; font-size: 0.8rem; padding: 5px;">LOGOUT</button>
+        <button onclick="handleLogout()" style="margin-top: 20px; font-size: 0.8rem; padding: 8px;">LOGOUT</button>
     </div>
 
-    <!-- Right Search Area -->
     <div class="search-side">
         <h1 style="font-size: 4rem; margin: 0 0 10px 0; letter-spacing: 3px;">NURA</h1>
         <p style="color: #8b949e; margin-bottom: 30px;">一癖あるインターネット — An internet with a twist.</p>
-        
         <div style="display: flex; width: 100%; max-width: 450px;">
             <input type="text" id="searchQuery" placeholder="SEARCH THE TWIST..." style="margin-bottom: 0; border-radius: 6px 0 0 6px;">
             <button onclick="triggerSearch()" style="width: auto; border-radius: 0 6px 6px 0; border-left: none; background: #21262d;">GO</button>
@@ -174,52 +191,47 @@
 </div>
 
 <script>
-    // List of fun cat facts
     const catFacts = [
         "Cats sleep for 70% of their lives. That's a lot of dreaming.",
-        "A cat's purr vibrates at a frequency that can actually stimulate bone and tissue regeneration.",
-        "The first cat in space was a French cat named Félicette in 1963. She survived the trip!",
-        "Cats have 32 muscles in each ear, allowing them to rotate them 180 degrees independently.",
-        "A cat cannot taste sweetness. They completely lack the sugar taste receptors.",
+        "A cat's purr vibrates at a frequency that can stimulate bone and tissue regeneration.",
+        "The first cat in space was a French cat named Félicette in 1963. She survived!",
+        "Cats have 32 muscles in each ear, allowing them to rotate them 180 degrees.",
+        "A cat cannot taste sweetness. They completely lack sugar taste receptors.",
         "Every cat's nose print is completely unique, just like a human fingerprint.",
         "Cats make about 100 different vocal sounds. Dogs only make about 10."
     ];
 
     window.onload = function() {
-        // Show random cat fact
-        const randomFact = catFacts[Math.floor(Math.random() * catFacts.length)];
-        document.getElementById('factText').innerText = randomFact;
-
-        // Check login status
         const savedUser = localStorage.getItem('nura_user');
-        if (savedUser) {
-            loadDashboard(JSON.parse(savedUser));
-        }
+        if (savedUser) { loadDashboard(JSON.parse(savedUser)); }
     };
 
-    function handleRegister() {
+    function openContinueModal() {
         const nick = document.getElementById('regNick').value.trim();
         const pass = document.getElementById('regPass').value;
         const birth = document.getElementById('regBirth').value;
+        if(!nick || !pass || !birth) { alert("Fill all fields to enter NURA."); return; }
+        const randomFact = catFacts[Math.floor(Math.random() * catFacts.length)];
+        document.getElementById('modalFactText').innerText = randomFact;
+        document.getElementById('continueModal').classList.remove('hidden');
+    }
 
-        if(!nick || !pass || !birth) {
-            alert("Fill all fields to enter NURA.");
-            return;
-        }
+    function closeContinueModal() { document.getElementById('continueModal').classList.add('hidden'); }
 
+    function confirmRegistration() {
+        const nick = document.getElementById('regNick').value.trim();
         const userData = { username: nick, avatar: "🌀", bit: "Standard" };
         localStorage.setItem('nura_user', JSON.stringify(userData));
+        document.getElementById('continueModal').classList.add('hidden');
         loadDashboard(userData);
     }
 
     function loadDashboard(data) {
         document.getElementById('authScreen').classList.add('hidden');
         document.getElementById('mainScreen').classList.remove('hidden');
-        
         document.getElementById('userNickName').innerText = data.username;
         document.getElementById('userAvatar').innerText = data.avatar;
         document.getElementById('userBitStatus').innerText = "Bit: " + data.bit;
-        
         document.getElementById('editName').value = data.username;
         document.getElementById('editAvatar').value = data.avatar;
         document.getElementById('editBit').value = data.bit;
@@ -229,31 +241,21 @@
         const newName = document.getElementById('editName').value.trim() || "User";
         const newAvatar = document.getElementById('editAvatar').value;
         const newBit = document.getElementById('editBit').value;
-
         document.getElementById('userNickName').innerText = newName;
         document.getElementById('userAvatar').innerText = newAvatar;
         document.getElementById('userBitStatus').innerText = "Bit: " + newBit;
-
         const updatedData = { username: newName, avatar: newAvatar, bit: newBit };
         localStorage.setItem('nura_user', JSON.stringify(updatedData));
     }
 
-    function handleLogout() {
-        localStorage.removeItem('nura_user');
-        location.reload(); // Reload to get a new cat fact on logout
-    }
+    function handleLogout() { localStorage.removeItem('nura_user'); location.reload(); }
 
     function triggerSearch() {
         const q = document.getElementById('searchQuery').value;
-        if (q.trim() !== "") {
-            window.location.href = "https://google.com" + encodeURIComponent(q);
-        }
+        if (q.trim() !== "") { window.location.href = "https://google.com" + encodeURIComponent(q); }
     }
 
-    document.getElementById('searchQuery').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') triggerSearch();
-    });
+    document.getElementById('searchQuery').addEventListener('keypress', function (e) { if (e.key === 'Enter') triggerSearch(); });
 </script>
-
 </body>
 </html>
