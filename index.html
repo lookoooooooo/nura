@@ -86,6 +86,9 @@
     .gate-title {
       color: #ff0055;
       font-weight: bold;
+      font-size: 18px;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
     }
     .field-wrap {
       display: flex;
@@ -129,6 +132,7 @@
 <body>
 
   <div class="main-frame">
+    <!-- ПОИСКОВАЯ СТРОКА С ПОДСКАЗКАМИ -->
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon">🔍</span>
@@ -143,6 +147,7 @@
       </div>
     </div>
 
+    <!-- РЕГИСТРАЦИЯ -->
     <div id="reg-form" class="cyber-gate">
       <div class="gate-title">ACCESS DENIED</div>
       <div class="field-wrap">
@@ -166,12 +171,14 @@
     const sBtn = document.getElementById('search-btn');
     const sugMenu = document.getElementById('suggestions');
     const go = document.getElementById('reg-go');
+    const nickInput = document.getElementById('nick');
 
     const globalBannedRegex = /хуй|хуе|хуи|пизд|ебан|ебат|уеб|бля|сук|залуп|мудак|шлюх|нах|член|fuc?k|bitch|shit|ass|cock|dick|cunt|pussy|whore|bastard|nigga|idiot|stupid|baka|クソ|バカ|アホ|チンポ|マンコ/vi;
     function clean(text) { return text.replace(globalBannedRegex, '***'); }
 
-    const nickInput = document.getElementById('nick');
-    nickInput.addEventListener('input', () => nickInput.value = clean(nickInput.value));
+    if (nickInput) {
+      nickInput.addEventListener('input', () => nickInput.value = clean(nickInput.value));
+    }
 
     sInp.addEventListener('focus', () => {
       sugMenu.classList.remove('hidden');
@@ -221,7 +228,7 @@
 <body>
 
   <div class="main-frame">
-  
+    <!-- ПОИСКОВАЯ СТРОКА С ПОДСКАЗКАМИ -->
     <div class="search-container">
       <div class="search-box">
         <span class="search-icon">🔍</span>
@@ -229,7 +236,7 @@
         <button id="search-btn">GO</button>
       </div>
       
-      <!-- ВЫЛЕЗАЮЩЕЕ МЕНЮ С ПОДСКАЗКАМИ -->
+      <!-- МЕНЮ ПОДСКАЗКАМИ -->
       <div id="suggestions" class="suggestions-menu hidden">
         <div class="suggest-item">hatsune miku</div>
         <div class="suggest-item">creepy story</div>
@@ -238,7 +245,7 @@
       </div>
     </div>
 
-    <!-- ФОРМА ХАКЕРСКОЙ РЕГИСТРАЦИИ -->
+    <!-- РЕГИСТРАЦИЯ -->
     <div id="reg-form" class="cyber-gate">
       <div class="gate-title">ACCESS DENIED</div>
       
@@ -261,7 +268,6 @@
     </div>
   </div>
 
-
   <script>
     const sInp = document.getElementById('search-input');
     const sBtn = document.getElementById('search-btn');
@@ -269,35 +275,29 @@
     const go = document.getElementById('reg-go');
     const nickInput = document.getElementById('nick');
 
-    // Жесткий фильтр матов на разных языках
     const globalBannedRegex = /хуй|хуе|хуи|пизд|ебан|ебат|уеб|бля|сук|залуп|мудак|шлюх|нах|член|fuc?k|bitch|shit|ass|cock|dick|cunt|pussy|whore|bastard|nigga|idiot|stupid|baka|クソ|バカ|アホ|チンポ|マンコ/vi;
     function clean(text) { return text.replace(globalBannedRegex, '***'); }
 
-    // Проверяем ник на мат при вводе
     if (nickInput) {
       nickInput.addEventListener('input', () => nickInput.value = clean(nickInput.value));
     }
 
-    // Показываем меню подсказок, когда нажимаешь на поиск
     sInp.addEventListener('focus', () => {
       sugMenu.classList.remove('hidden');
     });
 
-   
     document.addEventListener('click', (e) => {
       if (!sInp.contains(e.target) && !sugMenu.contains(e.target)) {
         sugMenu.classList.add('hidden');
       }
     });
 
- 
     document.querySelectorAll('.suggest-item').forEach(item => {
       item.addEventListener('click', () => {
         sInp.value = item.textContent;
         sugMenu.classList.add('hidden');
       });
     });
-
 
     function doSearch() {
       const q = sInp.value.trim().toLowerCase();
@@ -311,7 +311,6 @@
       if (e.key === 'Enter') doSearch();
     });
 
- 
     go.addEventListener('click', () => {
       const name = nickInput.value.trim();
       const pass = document.getElementById('pass').value;
@@ -322,7 +321,6 @@
         return;
       }
       
-
       localStorage.setItem('nura_username', name);
       alert('Identity Saved!');
       document.getElementById('reg-form').classList.add('hidden');
