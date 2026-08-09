@@ -2,48 +2,346 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NURA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NURA - Internet with a twist</title>
+  <style>
+    body {
+      background: #050505;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Рамка по центру экрана */
+    .main-frame {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      background: #0a0a0a;
+      border: 2px solid #333;
+      padding: 30px;
+      box-sizing: border-box;
+      border-radius: 8px;
+    }
+
+    /* Поисковая строка наверх */
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #111;
+      border: 1px solid #333;
+      padding: 5px 10px;
+      margin-bottom: 25px;
+      border-radius: 4px;
+    }
+
+    .search-icon {
+      margin-right: 8px;
+      font-size: 14px;
+    }
+
+    #search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: inherit;
+      outline: none;
+    }
+
+    #search-btn {
+      background: #00f0ff;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      padding: 4px 10px;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    /* Красивая хакерская регистрация */
+    .cyber-gate {
+      text-align: center;
+      border: 1px solid #ff0055;
+      padding: 20px;
+      background: #0d0408;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+    }
+
+    .gate-title {
+      color: #ff0055;
+      font-weight: bold;
+      font-size: 18px;
+      letter-spacing: 2px;
+    }
+
+    .gate-subtitle {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .field-wrap {
+      display: flex;
+      align-items: center;
+      background: #111;
+      border: 1px solid #333;
+      margin-bottom: 10px;
+      padding: 5px 10px;
+    }
+
+    .prefix {
+      color: #ff0055;
+      font-size: 11px;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+
+    .field-wrap input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: inherit;
+      outline: none;
+    }
+
+    #bday {
+      color-scheme: dark;
+    }
+
+    #reg-go {
+      background: #ff0055;
+      border: none;
+      color: #fff;
+      padding: 10px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    /* Голубой неоновый логотип */
+    #logo {
+      color: #00f0ff;
+      font-size: 3rem;
+      text-align: center;
+      margin: 10px 0 0 0;
+      text-shadow: 0 0 5px #00f0ff, 0 0 15px #00d8ff;
+    }
+
+    .sub {
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Аватарка ЖЕСТКО В УГЛУ ЭКРАНА монитора */
+    #user-hub {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+
+    #hub-trigger {
+      background: #111;
+      border: 2px solid #00f0ff;
+      font-size: 22px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    /* Выпадающее меню под ней */
+    #drop-menu {
+      position: absolute;
+      top: 55px;
+      right: 0;
+      background: #0d0d0d;
+      border: 1px solid #00f0ff;
+      padding: 15px;
+      width: 250px;
+      border-radius: 4px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+    }
+
+    #user-title {
+      margin: 0 0 10px 0;
+      color: #00f0ff;
+    }
+
+    .setting-group {
+      margin-bottom: 12px;
+    }
+
+    .setting-group label {
+      display: block;
+      font-size: 10px;
+      color: #555;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    #change-name, #user-bio, #bit, #exit {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      color: #fff;
+      padding: 8px;
+      box-sizing: border-box;
+      font-family: inherit;
+      border-radius: 4px;
+    }
+
+    #user-bio {
+      height: 60px;
+      resize: none;
+    }
+
+    #exit {
+      border-color: #ff0055;
+      color: #ff0055;
+      background: transparent;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #exit:hover {
+      background: #ff0055;
+      color: #fff;
+    }
+
+    /* Сетка эмодзи */
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      max-height: 90px;
+      overflow-y: auto;
+      border: 1px solid #222;
+      padding: 5px;
+    }
+
+    .em {
+      font-size: 18px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .em:hover {
+      background: #15222e;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Главный контейнер-рамка -->
+  <!-- ГЛАВНАЯ РАМКА САЙТА -->
   <div class="main-frame">
-    
-    <!-- СВЕТЯЩИЙСЯ ЛОГОТИП -->
-    <h1 id="logo">NURA</h1>
-    <div class="sub">An internet with a twist.</div>
 
-    <!-- ОКНО РЕГИСТРАЦИИ -->
-    <div id="reg-form">
-      <h2>JOIN NURA</h2>
-      <input type="text" id="nick" placeholder="Username">
-      <button id="reg-go">SIGN UP</button>
+    <!-- ПОИСКОВАЯ СТРОКА С ЛУПОЙ -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Search the internet...">
+      <button id="search-btn">GO</button>
     </div>
 
-    <!-- ВИДЖЕТ АККАУНТА (СКРЫТ) -->
+    <!-- КРАСИВАЯ РЕГИСТРАЦИЯ -->
+    <div id="reg-form" class="cyber-gate">
+      <div class="gate-title">ACCESS DENIED</div>
+      <div class="gate-subtitle">Create identity to bypass firewall</div>
+      
+      <div class="field-wrap">
+        <span class="prefix">> CODENAME:</span>
+        <input type="text" id="nick" placeholder="Enter nickname..." autocomplete="off">
+      </div>
+
+      <div class="field-wrap">
+        <span class="prefix">> PASSWORD:</span>
+        <input type="password" id="pass" placeholder="••••••••" autocomplete="off">
+      </div>
+
+      <div class="field-wrap">
+        <span class="prefix">> BIRTHDAY:</span>
+        <input type="date" id="bday">
+      </div>
+
+      <button id="reg-go">INITIALIZE LOGIN</button>
+    </div>
+
+    <!-- ТВОЙ ЛОГОТИП -->
+    <h1 id="logo" class="hidden">NURA</h1>
+    <div id="sub" class="sub hidden">An internet with a twist.</div>
+
+    <!-- ВИДЖЕТ АККАУНТА (ЖЕСТКО В УГЛУ ЭКРАНА) -->
     <div id="user-hub" class="hidden">
       <button id="hub-trigger">🍓</button>
-      
-      <!-- ВЫПАДАЮЩЕЕ МЕНЮ -->
       <div id="drop-menu" class="hidden">
         <h4 id="user-title">User</h4>
-        <input type="text" id="change-name">
         
-        <!-- СЕТКА ЭМОДЗИ -->
-        <div class="emoji-grid">
-          <span class="em">🍓</span><span class="em">💞</span>
-          <span class="em">🍮</span><span class="em">🎱</span>
-          <span class="em">🍀</span><span class="em">🌺</span>
-          <span class="em">🌸</span><span class="em">🪻</span>
-          <span class="em">🍁</span><span class="em">🍄</span>
-          <span class="em">🪺</span><span class="em">🌷</span>
-          <span class="em">☔️</span><span class="em">🌨️</span>
-          <span class="em">🫧</span><span class="em">🍙</span>
-          <span class="em">🧃</span><span class="em">🍡</span>
-          <span class="em">🍧</span><span class="em">🍥</span>
-          <span class="em">🍣</span><span class="em">🎸</span>
-          <span class="em">👾</span><span class="em">🌀</span>
+        <div class="setting-group">
+          <label>Change Name:</label>
+          <input type="text" id="change-name">
         </div>
+
+        <!-- ОПИСАНИЕ С АВТОФИЛЬТРОМ -->
+        <div class="setting-group">
+          <label>Status / Bio:</label>
+          <textarea id="user-bio" placeholder="Tell about yourself..."></textarea>
+        </div>
+
+        <div class="setting-group">
+          <label>Choose Avatar:</label>
+         <div class="emoji-grid">
+
+     <span class="em">🎯</span><span class="em">🎨</span>
+     <span class="em">🎆</span><span class="em">⏰</span>
+     <span class="em">💎</span><span class="em">🎀</span>
+     <span class="em">🩰</span><span class="em">🎼</span>
+     <span class="em">🎧</span><span class="em">🛸</span>
+     <span class="em">🕶️</span><span class="em">📟</span>
+     <span class="em">🪐</span><span class="em">🎮</span>
+     <span class="em">🕯️</span><span class="em">🗝️</span>
+     <span class="em">💽</span><span class="em">💿</span>
+     <span class="em">🌌</span><span class="em">🔮</span>
+     <span class="em">📽️</span><span class="em">📼</span>
+     <span class="em">📻</span><span class="em">☎️</span>
+     <span class="em">🏮</span><span class="em">🎐</span>
+     <span class="em">⛩️</span><span class="em">🗼</span>
+     <span class="em">🐈‍⬛</span><span class="em">🦊</span>
+     <span class="em">🐰</span><span class="em">🐼</span>
+     <span class="em">🐾</span><span class="em">🕊️</span>
+     <span class="em">🦋</span><span class="em">🪐</span>
+     <span class="em">⭐</span><span class="em">🌟</span>
+     <span class="em">🌙</span><span class="em">⚡</span>
+     <span class="em">✨</span><span class="em">🎈</span>
+     <span class="em">🧸</span><span class="em">🔑</span>
+     <span class="em">🍓</span><span class="em">💞</span>
+     <span class="em">🍮</span><span class="em">🎱</span>
+     <span class="em">🍀</span><span class="em">🌺</span>
+     <span class="em">🌸</span><span class="em">🪻</span>
+     <span class="em">🍁</span><span class="em">🍄</span>
+     <span class="em">🪺</span><span class="em">🌷</span>
+     <span class="em">☔️</span><span class="em">🌨️</span>
+     <span class="em">🫧</span><span class="em">🍙</span>
+     <span class="em">🧃</span><span class="em">🍡</span>
+     <span class="em">🍧</span><span class="em">🍥</span>
+     <span class="em">🍣</span><span class="em">🎸</span>
+     <span class="em">👾</span><span class="em">🌀</span>
+</div> 
 
         <select id="bit">
           <option>Standard Bit</option>
@@ -55,40 +353,85 @@
 
   </div>
 
-
+  <!-- СКРИПТЫ С ГЛОБАЛЬНЫМ ФИЛЬТРОМ НЕЦЕНЗУРНЫХ СЛОВ -->
   <script>
     const go = document.getElementById('reg-go');
     const trig = document.getElementById('hub-trigger');
     const menu = document.getElementById('drop-menu');
     const exit = document.getElementById('exit');
+    const sBtn = document.getElementById('search-btn');
+    const sInp = document.getElementById('search-input');
+    const bioInput = document.getElementById('user-bio');
+    const nameChangeInput = document.getElementById('change-name');
 
-    // Клик по аватару
+    // Регулярное выражение отслеживает плохие слова на любых языках (RU, EN, JP)
+    const globalBannedRegex = /хуй|хуе|хуи|пизд|ебан|ебат|уеб|бля|сук|залуп|мудак|шлюх|нах|член|fuc?k|bitch|shit|ass|cock|dick|cunt|pussy|whore|bastard|nigga|idiot|stupid|baka|クсо|バカ|アホ|チンポ|マンコ/vi;
+
+    function cleanProphanity(text) {
+      return text.replace(globalBannedRegex, '***');
+    }
+
+    // Фильтр для описания
+    bioInput.addEventListener('input', () => {
+      bioInput.value = cleanProphanity(bioInput.value);
+    });
+
+    // Фильтр для смены имени
+    nameChangeInput.addEventListener('input', () => {
+      nameChangeInput.value = cleanProphanity(nameChangeInput.value);
+      document.getElementById('user-title').textContent = nameChangeInput.value || 'User';
+    });
+
+    // Работа поиска через Google в новой вкладке
+    sBtn.addEventListener('click', () => {
+      const q = sInp.value.trim();
+      if(q) window.open(`https://google.com{encodeURIComponent(q)}`, '_blank');
+    });
+
+    sInp.addEventListener('keypress', (e) => {
+      if(e.key === 'Enter') sBtn.click();
+    });
+
+    // Выпадающее меню аккаунта
     trig.addEventListener('click', (e) => {
       e.stopPropagation();
       menu.classList.toggle('hidden');
     });
 
-  
+    // Кнопка входа
     go.addEventListener('click', () => {
-      const name = document.getElementById('nick').value;
-      if(!name) return;
+      let name = document.getElementById('nick').value.trim();
+      const pass = document.getElementById('pass').value;
+      const bday = document.getElementById('bday').value;
+      
+      if(!name || !pass || !bday) {
+        alert('Fill all fields!');
+        return;
+      }
+
+      name = cleanProphanity(name);
+
       document.getElementById('reg-form').classList.add('hidden');
+      document.getElementById('logo').classList.remove('hidden');
+      document.getElementById('sub').classList.remove('hidden');
       document.getElementById('user-hub').classList.remove('hidden');
       document.getElementById('user-title').textContent = name;
+      nameChangeInput.value = name;
     });
 
-   
+    // Логаут
     exit.addEventListener('click', () => {
       document.getElementById('reg-form').classList.remove('hidden');
+      document.getElementById('logo').classList.add('hidden');
+      document.getElementById('sub').classList.add('hidden');
       document.getElementById('user-hub').classList.add('hidden');
       menu.classList.add('hidden');
     });
 
- 
     document.addEventListener('click', () => menu.classList.add('hidden'));
     menu.addEventListener('click', (e) => e.stopPropagation());
 
-   
+    // Выбор аватара
     document.querySelectorAll('.em').forEach(el => {
       el.addEventListener('click', () => {
         trig.textContent = el.textContent;
@@ -97,131 +440,3 @@
   </script>
 </body>
 </html>
-<style>
-body {
-  background: #050505;
-  color: #fff;
-  font-family: monospace;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
-
-.main-frame {
-  position: relative;
-  width: 100%;
-  max-width: 440px;
-  background: #0a0a0a;
-  border: 2px solid #333;
-  padding: 30px;
-  box-sizing: border-box;
-}
-
-#logo {
-  color: #00f0ff;
-  font-size: 3rem;
-  text-align: center;
-  margin: 0;
-  text-shadow: 
-    0 0 5px #00f0ff,
-    0 0 15px #00d8ff;
-}
-
-.sub {
-  font-size: 12px;
-  color: #666;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-#reg-form {
-  text-align: center;
-}
-
-#reg-form h2 {
-  color: #ff0055;
-}
-
-#nick {
-  width: 100%;
-  background: #111;
-  border: 1px solid #333;
-  color: #fff;
-  padding: 10px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-}
-
-#reg-go {
-  background: #ff0055;
-  border: none;
-  color: #fff;
-  padding: 10px;
-  width: 100%;
-  cursor: pointer;
-}
-
-#user-hub {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-
-#hub-trigger {
-  background: #111;
-  border: 2px solid #00f0ff;
-  font-size: 20px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-#drop-menu {
-  position: absolute;
-  top: 50px;
-  right: 0;
-  background: #0d0d0d;
-  border: 1px solid #00f0ff;
-  padding: 15px;
-  width: 240px;
-}
-
-#change-name, #bit, #exit {
-  width: 100%;
-  background: #111;
-  border: 1px solid #333;
-  color: #fff;
-  padding: 6px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-}
-
-#exit {
-  border-color: #ff0055;
-  color: #ff0055;
-  background: transparent;
-  cursor: pointer;
-}
-
-.emoji-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 5px;
-  margin-bottom: 10px;
-  max-height: 100px;
-  overflow-y: auto;
-}
-
-.em {
-  font-size: 18px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.hidden {
-  display: none !important;
-}
-</style>
