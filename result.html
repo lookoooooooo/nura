@@ -3,323 +3,214 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NURA - Result</title>
+  <title>NURA - Database Logs</title>
   <style>
     body {
-      background: #050505;
-      color: #fff;
-      font-family: 'Courier New', monospace;
+      background-color: #f4ebe1; 
+      background-image: radial-gradient(#e3d5ca 2px, transparent 2px);
+      background-size: 16px 16px;
+      color: #6b5b52;
+      font-family: 'MS Gothic', 'Courier New', monospace;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
     }
+
     .main-frame {
       width: 100%;
-      max-width: 440px;
-      background: #0a0a0a;
-      border: 2px solid #333;
-      padding: 30px;
+      max-width: 500px;
+      background: #fffdf9;
+      border: 4px double #b7b7a4; 
+      padding: 25px;
       box-sizing: border-box;
-      border-radius: 8px;
+      border-radius: 4px;
+      box-shadow: 6px 6px 0px #ddbea9;
     }
-    #logo {
-      color: #00f0ff;
-      font-size: 3rem;
-      text-align: center;
-      margin: 0;
-      text-shadow: 0 0 5px #00f0ff, 0 0 15px #00d8ff;
-    }
-    .sub {
-      font-size: 12px;
-      color: #666;
-      text-align: center;
+    
+    .header-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px dashed #e3d5ca;
+      padding-bottom: 15px;
       margin-bottom: 20px;
     }
-    /* Виджет аккаунта ЖЕСТКО В УГЛУ ЭКРАНА */
-    #user-hub {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
+
+    .brand-logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: #a3b18a; 
+      text-decoration: none;
+      text-shadow: 0 0 4px #fff, 0 0 8px #a3b18a;
     }
-    #hub-trigger {
-      background: #111;
-      border: 2px solid #00f0ff;
-      font-size: 22px;
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      cursor: pointer;
+
+    .user-badge {
+      font-size: 11px;
+      background: #f7f9f4;
+      padding: 4px 8px;
+      border: 1px dashed #a3b18a;
+      color: #a3b18a;
     }
-    #drop-menu {
-      position: absolute;
-      top: 55px;
-      right: 0;
-      background: #0d0d0d;
-      border: 1px solid #00f0ff;
-      padding: 15px;
-      width: 250px;
-      border-radius: 4px;
+
+    .search-info {
+      font-size: 12px;
+      margin-bottom: 20px;
+      background: #fcfaf2;
+      padding: 10px;
+      border: 1px solid #cb997e;
     }
-    .setting-group {
-      margin-bottom: 12px;
+
+    .query-text {
+      color: #ff758f;
+      font-weight: bold;
     }
-    .setting-group label {
-      display: block;
-      font-size: 10px;
-      color: #555;
-      margin-bottom: 4px;
-    }
-    #change-name, #user-bio, #exit {
-      width: 100%;
-      background: #111;
-      border: 1px solid #333;
-      color: #fff;
-      padding: 8px;
-      box-sizing: border-box;
-      font-family: inherit;
-    }
-    #user-bio {
-      height: 60px;
-      resize: none;
-    }
-    /* Компактная сетка эмодзи */
-    .emoji-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 6px;
-      max-height: 90px;
-      overflow-y: auto;
-      border: 1px solid #222;
-      padding: 5px;
-    }
-    .em {
-      font-size: 18px;
-      cursor: pointer;
-      text-align: center;
-    }
-    .em:hover {
-      background: #15222e;
-    }
-    /* Окно результатов поиска */
-    #nura-search-result {
-      background: #0d0d0d;
-      border: 1px solid #00f0ff;
-      padding: 15px;
-      margin-top: 20px;
-    }
-    #nura-search-result h3 {
-      margin: 0 0 8px 0;
-      color: #00f0ff;
-    }
-    .search-res-btns {
+
+    .results-list {
       display: flex;
-      gap: 10px;
-      margin-top: 15px;
+      flex-direction: column;
+      gap: 15px;
     }
-    .translate-btn, .back-btn {
-      background: transparent;
-      border: 1px solid #00f0ff;
-      color: #00f0ff;
-      padding: 6px 12px;
-      cursor: pointer;
-      font-family: inherit;
+
+    .result-card {
+      border: 1px solid #b7b7a4;
+      padding: 15px;
+      background: #fff;
+      box-shadow: 3px 3px 0px #e3d5ca;
+      transition: 0.2s;
     }
-    .translate-btn:hover {
-      background: #00f0ff;
-      color: #000;
+
+    .result-card:hover {
+      border-color: #cb997e;
+      box-shadow: 3px 3px 0px #cb997e;
+      transform: translate(-1px, -1px);
     }
+
+    .result-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #cb997e;
+      margin-bottom: 5px;
+    }
+
+    .result-snippet {
+      font-size: 12px;
+      line-height: 1.4;
+      color: #6b5b52;
+    }
+
     .back-btn {
-      border-color: #ff0055;
-      color: #ff0055;
+      display: inline-block;
+      margin-top: 25px;
+      background: #ffe3e0;
+      border: 2px solid #ffb3a7;
+      color: #ff758f;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+      text-decoration: none;
+      box-shadow: 3px 3px 0px #ffb3a7;
     }
+
     .back-btn:hover {
-      background: #ff0055;
+      background: #ffb3a7;
       color: #fff;
     }
-    .hidden {
-      display: none !important;
+
+    .back-btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: none;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 30px 10px;
+      font-size: 13px;
+      color: #b7b7a4;
     }
   </style>
 </head>
 <body>
 
   <div class="main-frame">
-    <h1 id="logo">NURA</h1>
-    <div class="sub">An internet with a twist.</div>
-
-    <!-- ОКНО РЕЗУЛЬТАТА ПОИСКА -->
-    <div id="nura-search-result">
-      <h3 id="res-title">Searching...</h3>
-      <p id="res-text-content">Loading database block...</p>
-      <div class="search-res-btns">
-        <button class="translate-btn" id="trans-btn">Translate to Japanese</button>
-        <button class="back-btn" onclick="window.location.href='index.html'">BACK</button>
-      </div>
+    <div class="header-area">
+      <a href="index.html" class="brand-logo">*(o.o)* NURA</a>
+      <div id="user-display" class="user-badge">GUEST</div>
     </div>
 
-    <!-- ВИДЖЕТ АККАУНТА (ЖЕСТКО В УГЛУ ЭКРАНА) -->
-    <div id="user-hub">
-      <button id="hub-trigger">🍓</button>
-      <div id="drop-menu" class="hidden">
-        <h4 id="user-title">User Profile</h4>
-        
-        <div class="setting-group">
-          <label>Change Name:</label>
-          <input type="text" id="change-name" value="User">
-        </div>
-        
-        <div class="setting-group">
-          <label>Status / Bio:</label>
-          <textarea id="user-bio" placeholder="Tell about yourself..."></textarea>
-        </div>
-        
-        <div class="setting-group">
-          <label>Choose Avatar:</label>
-          <div class="emoji-grid">
-            <span class="em">🎯</span><span class="em">🎨</span>
-            <span class="em">🎆</span><span class="em">⏰</span>
-            <span class="em">💎</span><span class="em">🎀</span>
-            <span class="em">🩰</span><span class="em">🎼</span>
-            <span class="em">🎧</span><span class="em">🛸</span>
-            <span class="em">🕶️</span><span class="em">📟</span>
-            <span class="em">🪐</span><span class="em">🎮</span>
-            <span class="em">🕯️</span><span class="em">🗝️</span>
-            <span class="em">💽</span><span class="em">💿</span>
-            <span class="em">🌌</span><span class="em">🔮</span>
-            <span class="em">📽️</span><span class="em">📼</span>
-            <span class="em">📻</span><span class="em">☎️</span>
-            <span class="em">🏮</span><span class="em">🎐</span>
-            <span class="em">⛩️</span><span class="em">🗼</span>
-            <span class="em">🐈‍⬛</span><span class="em">🦊</span>
-            <span class="em">🐰</span><span class="em">🐼</span>
-            <span class="em">🐾</span><span class="em">🕊️</span>
-            <span class="em">🦋</span><span class="em">🪐</span>
-            <span class="em">⭐</span><span class="em">🌟</span>
-            <span class="em">🌙</span><span class="em">⚡</span>
-            <span class="em">✨</span><span class="em">🎈</span>
-            <span class="em">🧸</span><span class="em">🔑</span>
-            <span class="em">🍓</span><span class="em">💞</span>
-            <span class="em">🍮</span><span class="em">🎱</span>
-            <span class="em">🍀</span><span class="em">🌺</span>
-            <span class="em">🌸</span><span class="em">🪻</span>
-            <span class="em">🍁</span><span class="em">🍄</span>
-            <span class="em">🪺</span><span class="em">🌷</span>
-            <span class="em">☔️</span><span class="em">🌨️</span>
-            <span class="em">🫧</span><span class="em">🍙</span>
-            <span class="em">🧃</span><span class="em">🍡</span>
-            <span class="em">🍧</span><span class="em">🍥</span>
-            <span class="em">🍣</span><span class="em">🎸</span>
-            <span class="em">👾</span><span class="em">🌀</span>
-          </div>
-        </div>
-        <button id="exit" onclick="localStorage.removeItem('nura_username'); window.location.href='index.html'">LOGOUT</button>
-      </div>
+    <div class="search-info">
+      ✧ LOG_SEARCH_REQUEST: <span id="search-target" class="query-text">None</span>
     </div>
+
+    <div id="results-container" class="results-list"></div>
+
+    <a href="index.html" class="back-btn">[ <-- GO BACK ]</a>
   </div>
 
   <script>
-    // Локальная база ответов
-    const nuraDatabase = {
-      cats: {
-        keywords: ['кят', 'кятс', 'китти', 'кот', 'коты', 'кошка', 'кошки', 'cat', 'cats', 'kitty', 'ねこ', 'ネコ', '猫', 'neko'],
-        title: '🐱 CATS DATA-BLOCK',
-        en: 'Cats are small, carnivorous mammals with soft fur, triangular ears, sharp claws, and long tails. They are known for their agility and independent nature.',
-        ja: '猫（ネコ）は、柔らかい毛並み、三角形の耳、鋭い爪、長い尻尾を持つ小型の肉食哺乳類です。その俊敏性と独立した性格で知られています。'
-      },
-      miku: {
-        keywords: ['хацуне мику', 'мику', 'miku', 'hatsune miku', '初音ミク'],
-        title: '🎤 HATSUNE MIKU DATA',
-        en: 'Hatsune Miku is a Japanese virtual pop star developed by Crypton Future Media, singing via Vocaloid software and performing as a 3D hologram.',
-        ja: '初音ミク（ハツネミク）は、クリプトン・フューチャー・メディアが開発した、音声合成ソフト（ボーカロイド）で歌う日本のバーチャルポップスターです。'
-      },
-      story: {
-        keywords: ['жуткая история', 'creepy story', 'horror', 'scary'],
-        title: '👁️ CREEPY DATA-BLOCK',
-        en: 'You hear a whisper from the corner of your dark room: "System online". But your computer has been unplugged for hours.',
-        ja: '暗い部屋の隅から囁き声が聞こえる：「システムオンライン」。しかし、パソコンの電源プラグは数時間前から抜かれたままだ。'
-      },
-      kaomoji: {
-        keywords: ['каоэмодзи', 'kaomoji', '顔文字'],
-        title: '⸜( *ˊᵕˋ* )⸝ KAOMOJI LIST',
-        en: 'Japanese text emoticons used to express emotions in texting. Examples: (づ ◕‿◕ )づ , (＠_＠) , ᕦ( ͡° ͜ʖ ͡°)ᕤ.',
-        ja: 'テキストで感情を表現するために使われる日本の文字ベースのエモティコン（顔文字）です。例：(づ ◕‿◕ )づ , (＠_＠).'
-      }
-    };
-
-    // Фильтр мата на русском, английском и японском
-    const globalBannedRegex = /хуй|хуе|хуи|пизд|ебан|ебат|уеб|бля|сук|залуп|мудак|шлюх|нах|член|fuc?k|bitch|shit|ass|cock|dick|cunt|pussy|whore|bastard|nigga|idiot|stupid|baka|クソ|バカ|アホ|チンポ|マンコ/vi;
-    function clean(text) { return text.replace(globalBannedRegex, '***'); }
-
-    // Подгрузка имени из памяти
-    const savedName = localStorage.getItem('nura_username') || 'User';
-    const uTitle = document.getElementById('user-title');
-    const cName = document.getElementById('change-name');
-    uTitle.textContent = savedName;
-    cName.value = savedName;
-
-    // Вешаем фильтр на поля ввода
-    const bio = document.getElementById('user-bio');
-    bio.addEventListener('input', () => bio.value = clean(bio.value));
-    cName.addEventListener('input', () => {
-      cName.value = clean(cName.value);
-      uTitle.textContent = cName.value || 'User';
-      localStorage.setItem('nura_username', cName.value);
-    });
-
-    // Извлечение поискового запроса из адресной строки
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get('q');
-    const resTitle = document.getElementById('res-title');
-    const resText = document.getElementById('res-text-content');
-    const tBtn = document.getElementById('trans-btn');
-
-    let currentData = null;
-    let isEn = true;
-
-    if (query) {
-      for (let key in nuraDatabase) {
-        if (nuraDatabase[key].keywords.includes(query.toLowerCase())) {
-          currentData = nuraDatabase[key];
-          break;
-        }
-      }
+    const savedUser = localStorage.getItem('nura_username');
+    if (savedUser) {
+      document.getElementById('user-display').textContent = `USER: ${savedUser}`;
     }
 
-    // Вывод текста или редирект в Google
-    if (currentData) {
-      resTitle.textContent = currentData.title;
-      resText.textContent = currentData.en;
-      
-      tBtn.addEventListener('click', () => {
-        if (isEn) {
-          resText.textContent = currentData.ja;
-          tBtn.textContent = 'Translate to English';
-          isEn = false;
-        } else {
-          resText.textContent = currentData.en;
-          tBtn.textContent = 'Translate to Japanese';
-          isEn = true;
-        }
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('q') ? urlParams.get('q').trim().toLowerCase() : '';
+    
+    document.getElementById('search-target').textContent = query ? `"${query}"` : 'empty_target';
+
+    const database = [
+      {
+        keywords: ['hatsune miku', 'miku', 'vocaloid'],
+        title: '✦ LOG_039: Project_Miku.txt',
+        snippet: 'A digital voice echo found inside an old server grid dated 2007. It smells like leeks and glowing neon pixels. She is still singing...'
+      },
+      {
+        keywords: ['creepy story', 'creepy', 'ghost', 'story'],
+        title: '✦ LOG_666: The_Midnight_Modem.log',
+        snippet: 'In 1999, a user connected to a strange terminal called NURA. After midnight, the text turned into moving eyes. The user never logged off.'
+      },
+      {
+        keywords: ['kaomoji', 'emoticon', 'smile'],
+        title: '✦ LOG_101: Ancient_Faces.dat',
+        snippet: 'Collection of forgotten expressions: *(o.o)* ✧ ヘ( ^o^)/ ◌ (X.X) ✿ (｡♥‿♥｡) ◌ (𖦹_𖦹). They hold the raw emotion of the early internet era.'
+      },
+      {
+        keywords: ['cat', 'neko', 'cats'],
+        title: '✦ LOG_002: Neko_Cache.bin',
+        snippet: 'Pixelated paws detected in the memory sector. A tiny spirit cat appears to be sleeping directly on top of your local storage data.'
+      }
+    ];
+
+    const container = document.getElementById('results-container');
+
+    const matchedResults = database.filter(item => {
+      return item.keywords.some(keyword => query.includes(keyword) || keyword.includes(query));
+    });
+
+    if (query === '') {
+      container.innerHTML = '<div class="no-results">(X.X)<br><br>No request specified.<br>Please return and type something!</div>';
+    } else if (matchedResults.length > 0) {
+      matchedResults.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.innerHTML = `
+          <div class="result-title">${item.title}</div>
+          <div class="result-snippet">${item.snippet}</div>
+        `;
+        container.appendChild(card);
       });
     } else {
-      window.location.href = `https://google.com{encodeURIComponent(query)}`;
+      container.innerHTML = `
+        <div class="result-card">
+          <div class="result-title">✧ SYSTEM_ALERT: Signal_Lost.err</div>
+          <div class="result-snippet">NURA searched the grid for "${query}" but found only empty noise. Maybe this memory belongs to a future that has not happened yet?</div>
+        </div>
+      `;
     }
-
-    // Логика выпадающего меню аккаунта
-    const trig = document.getElementById('hub-trigger');
-    const menu = document.getElementById('drop-menu');
-    trig.addEventListener('click', (e) => {
-      e.stopPropagation();
-      menu.classList.toggle('hidden');
-    });
-    document.addEventListener('click', () => menu.classList.add('hidden'));
-    menu.addEventListener('click', (e) => e.stopPropagation());
-    document.querySelectorAll('.em').forEach(el => {
-      el.addEventListener('click', () => trig.textContent = el.textContent);
-    });
   </script>
 </body>
 </html>
