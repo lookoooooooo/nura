@@ -178,9 +178,7 @@
 <body>
 
   <div class="main-frame">
-    <!-- ЛОГОТИП СИСТЕМЫ -->
-    <!-- Если захочешь картинку, раскомментируй строку ниже и вставь путь вместо logo.png -->
-    <!-- <div style="text-align:center; margin-bottom:15px;"><img src="logo.png" alt="Logo" style="max-width:120px; filter: drop-shadow(0 0 8px #00f0ff);"></div> -->
+    <!-- ЛОГОТИП СИСТЕМЫ (Виден всегда) -->
     <div class="brand-logo">NURA</div>
 
     <!-- ПОИСКОВАЯ СТРОКА С ПОДСКАЗКАМИ -->
@@ -198,7 +196,7 @@
       </div>
     </div>
 
-    <!-- РЕГИСТРАЦИЯ -->
+    <!-- РЕГИСТРАЦИЯ (Скроется автоматически, если юзер уже заходил) -->
     <div id="reg-form" class="cyber-gate">
       <div class="gate-title">ACCESS DENIED</div>
       <div class="field-wrap">
@@ -223,6 +221,12 @@
     const sugMenu = document.getElementById('suggestions');
     const go = document.getElementById('reg-go');
     const nickInput = document.getElementById('nick');
+    const regForm = document.getElementById('reg-form');
+
+    // ПРОВЕРКА ПРИ ЗАГРУЗКЕ СТРАНИЦЫ: Если имя уже есть в базе, прячем форму
+    if (localStorage.getItem('nura_username')) {
+      regForm.classList.add('hidden');
+    }
 
     const globalBannedRegex = /хуй|хуе|хуи|пизд|ебан|ебат|уеб|бля|сук|залуп|мудак|шлюх|нах|член|fuc?k|bitch|shit|ass|cock|dick|cunt|pussy|whore|bastard|nigga|idiot|stupid|baka|クソ|バカ|アホ|チンポ|マンコ/vi;
     function clean(text) { return text.replace(globalBannedRegex, '***'); }
@@ -270,7 +274,7 @@
       }
       localStorage.setItem('nura_username', name);
       alert('Identity Saved!');
-      document.getElementById('reg-form').classList.add('hidden');
+      regForm.classList.add('hidden');
     });
   </script>
 </body>
