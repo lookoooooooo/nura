@@ -263,17 +263,15 @@
             </div>
         </div>
     </div>
-    <script>
+       <script>
         const searchDatabase = {
-                                            
-            
             "hatsune miku": {
                 title: "✦ Hatsune Miku Official Database Terminal ✦",
                 url: "http://nura.net",
                 desc: `
                     <div class="article-layout">
-                        <img src="hatsunemiku.png" alt="Hatsune Miku" class="miku-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        <span style="display:none; font-size:40px;">🩵</span>
+                        <!-- Убрали onerror, теперь браузер будет искать только чистый файл hatsunemiku.png -->
+                        <img src="hatsunemiku.png" alt="Hatsune Miku" class="miku-image">
                         <div class="article-text">
                             Hatsune Miku (初音ミク) is a world-famous virtual pop star and humanoid persona voiced by a singing synthesizer application. Developed by Crypton Future Media, she is a 16-year-old girl with iconic long, turquoise twin-tails. Her music is created directly by the internet community.
                         </div>
@@ -336,6 +334,7 @@
 
         const searchItems = Object.keys(searchDatabase);
 
+        // [Остальной JS-код без изменений...]
         function getSearchQuery() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('q');
@@ -397,3 +396,4 @@
     </script>
 </body>
 </html>
+
