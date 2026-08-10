@@ -232,6 +232,91 @@
             color: #4a341e;
         }
 
+        #profile-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f7e3af;
+            border: 3px solid #6b1d1d;
+            box-shadow: 4px 4px 0px #351010;
+            padding: 10px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        #profile-widget:hover {
+            background: #fffcf2;
+        }
+
+        #widget-avatar {
+            font-size: 28px;
+        }
+
+        #widget-name {
+            font-weight: bold;
+            font-size: 13px;
+            color: #6b1d1d;
+        }
+
+        #edit-window {
+            max-width: 400px;
+            position: fixed;
+            top: 15vh;
+            z-index: 101;
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-text {
+            width: 100%;
+            padding: 8px;
+            border: 3px solid #6b1d1d;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            background: #fffcf2;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-top: 5px;
+            background: #fffcf2;
+            padding: 8px;
+            border: 2px solid #6b1d1d;
+        }
+
+        .avatar-option {
+            font-size: 24px;
+            text-align: center;
+            cursor: pointer;
+            padding: 4px;
+            border: 2px solid transparent;
+        }
+
+        .avatar-option:hover {
+            background: #f7b859;
+        }
+
+        .avatar-option.selected {
+            border-color: #6b1d1d;
+            background: #872525;
+        }
+
         @keyframes bounce { 
             from { transform: translateY(0); } 
             to { transform: translateY(-5px); } 
@@ -239,6 +324,11 @@
     </style>
 </head>
 <body>
+
+    <div id="profile-widget" onclick="openEdit()">
+        <div id="widget-avatar">🍒</div>
+        <div id="widget-name">Guest</div>
+    </div>
 
     <div class="window">
         <div class="window-header">
@@ -263,15 +353,38 @@
             </div>
         </div>
     </div>
-       <script>
+
+    <div id="edit-window" class="window">
+        <div class="window-header">
+            <span class="window-title">edit_profile.exe</span>
+            <div class="window-dots"><span onclick="closeEdit()"></span><span></span><span></span></div>
+        </div>
+        <div class="window-body">
+            <div class="form-group">
+                <label>edit username:</label>
+                <input type="text" id="edit-username" class="input-text">
+            </div>
+            <div class="form-group">
+                <label>edit bio:</label>
+                <input type="text" id="edit-bio" class="input-text">
+            </div>
+            <div class="form-group">
+                <label>edit avatar:</label>
+                <div class="avatar-grid" id="edit-avatar-grid"></div>
+            </div>
+            <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+                <button class="btn" style="background: #ffcbdc;" onclick="closeEdit()">cancel</button>
+    <script>
+        const emojis = ['🍡', '🎀', '🥕', '🦋', '🪀', '🎱', '🍔', '🍒', '🥝', '🍏', '🍎', '🍧', '🍮', '🥮', '🍭', '🍰', '🌰', '🍯', '🍬', '🥛', '🍼', '🎸', '🩰', '🎨', '🥳'];
+        let selectedAvatar = '🍒';
+
         const searchDatabase = {
             "hatsune miku": {
                 title: "✦ Hatsune Miku Official Database Terminal ✦",
                 url: "http://nura.net",
                 desc: `
                     <div class="article-layout">
-                        <!-- Убрали onerror, теперь браузер будет искать только чистый файл hatsunemiku.png -->
-                        <img src="hatsunemiku.png" alt="Hatsune Miku" class="miku-image">
+                        <img src="./hatsunemiku.png" alt="Hatsune Miku" class="miku-image">
                         <div class="article-text">
                             Hatsune Miku (初音ミク) is a world-famous virtual pop star and humanoid persona voiced by a singing synthesizer application. Developed by Crypton Future Media, she is a 16-year-old girl with iconic long, turquoise twin-tails. Her music is created directly by the internet community.
                         </div>
@@ -298,8 +411,7 @@
                     <div class="chat-section">
                         <div class="chat-layout">
                             <div class="chat-avatar-container" style="animation: bounce 0.4s infinite alternate;">
-                                <img src="notmiku.gif" alt="NotMiku" class="miku-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                <span style="display:none; font-size:40px;">🎤</span>
+                                <img src="./notmiku.gif" alt="NotMiku" class="miku-avatar">
                             </div>
                             <div class="chat-text-area">
                                 <div id="miku-text">
@@ -334,7 +446,6 @@
 
         const searchItems = Object.keys(searchDatabase);
 
-        // [Остальной JS-код без изменений...]
         function getSearchQuery() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('q');
@@ -390,10 +501,37 @@
             }
         }
 
-        window.onload = function() {
-            displayResults();
-        };
-    </script>
-</body>
-</html>
+        function initAvatars(gridId, onClickCallback) {
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = '';
+            emojis.forEach((emoji) => {
+                const item = document.createElement('div');
+                item.className = 'avatar-option';
+                if (emoji === selectedAvatar) item.classList.add('selected');
+                item.textContent = emoji;
+                item.onclick = () => {
+                    document.querySelectorAll(`#${gridId} .avatar-option`).forEach(el => el.classList.remove('selected'));
+                    item.classList.add('selected');
+                    onClickCallback(emoji);
+                };
+                grid.appendChild(item);
+            });
+        }
 
+        function openEdit() {
+            const data = JSON.parse(localStorage.getItem('nura_user'));
+            if (!data) return;
+            document.getElementById('edit-username').value = data.username;
+            document.getElementById('edit-bio').value = data.bio;
+            selectedAvatar = data.avatar;
+            initAvatars('edit-avatar-grid', (emoji) => { selectedAvatar = emoji; });
+            document.getElementById('edit-window').style.display = 'block';
+        }
+
+        function closeEdit() {
+            document.getElementById('edit-window').style.display = 'none';
+        }
+
+        function saveEdit() {
+            const username = document.getElementById('edit-username').value || 'lookooooooo';
+            const bio = document.getElementById('edit-bio').value || 'just another internet surfer';
