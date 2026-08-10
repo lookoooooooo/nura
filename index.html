@@ -8,11 +8,12 @@
         @import url('https://googleapis.com');
 
         body {
-            background-color: #dbf0db; 
-            background-image: radial-gradient(#b2dbb2 15%, transparent 16%);
+            /* Мягкий тёмно-зелёный ретро-фон */
+            background-color: #1e351e; 
+            background-image: radial-gradient(#152515 15%, transparent 16%);
             background-size: 16px 16px;
             font-family: 'Courier Prime', 'Courier', monospace;
-            color: #2c4c2c;
+            color: #1b1008;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -23,9 +24,10 @@
         }
 
         .window {
-            background: #ffffff;
-            border: 3px solid #2c4c2c;
-            box-shadow: 6px 6px 0px #8ebf8e;
+            /* Приглушённый оранжево-жёлтый корпус окна */
+            background: #f7e3af;
+            border: 3px solid #6b1d1d;
+            box-shadow: 6px 6px 0px #351010;
             max-width: 600px;
             width: 100%;
             margin-top: 40px;
@@ -34,22 +36,24 @@
         }
 
         .window-header {
-            background: repeating-linear-gradient(45deg, #a4dba4, #a4dba4 10px, #bcedbc 10px, #bcedbc 20px);
-            border-bottom: 3px solid #2c4c2c;
+            /* Тёмно-красная благородная шапка */
+            background: #872525;
+            color: #ffe6bd;
             padding: 8px;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 14px;
+            border-bottom: 3px solid #6b1d1d;
         }
 
         .window-dots span {
             display: inline-block;
             width: 10px;
             height: 10px;
-            background: #ffffff;
-            border: 2px solid #2c4c2c;
+            background: #f7e3af;
+            border: 2px solid #6b1d1d;
             margin-left: 4px;
             cursor: pointer;
         }
@@ -63,34 +67,85 @@
             font-size: 28px;
             margin-top: 0;
             margin-bottom: 5px;
-            color: #3b6b3b;
-            text-shadow: 2px 2px 0px #c2ecc2;
+            color: #6b1d1d;
         }
 
         .slogan {
             font-size: 16px;
             font-weight: bold;
-            color: #2c4c2c;
+            color: #4a341e;
             margin-bottom: 20px;
         }
 
         marquee {
-            background: #f0fbf0;
-            border: 1px dashed #2c4c2c;
+            /* Контрастная тёмная бегущая строка */
+            background: #2b3d2b;
+            color: #e3ffd4;
+            border: 2px solid #6b1d1d;
             padding: 5px;
             margin-bottom: 20px;
             font-size: 13px;
         }
 
+        .search-container {
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 3px solid #6b1d1d;
+            background: #fffcf2;
+            color: #1b1008;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: #ffffff;
+        }
+
+        .suggestions-box {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fffcf2;
+            border: 3px solid #6b1d1d;
+            z-index: 10;
+            display: none;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        .suggestion-item {
+            padding: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #1b1008;
+        }
+
+        .suggestion-item:hover {
+            background: #872525;
+            color: #ffe6bd;
+        }
+
         .btn {
             display: inline-block;
-            background: #fff3cd;
-            border: 2px solid #2c4c2c;
+            /* Насыщенный оранжево-жёлтый элемент для кнопок */
+            background: #f7b859;
+            border: 2px solid #6b1d1d;
             padding: 8px 16px;
-            color: #2c4c2c;
+            color: #2b1100;
             text-decoration: none;
             font-weight: bold;
-            box-shadow: 3px 3px 0px #2c4c2c;
+            box-shadow: 3px 3px 0px #6b1d1d;
             cursor: pointer;
             margin-right: 10px;
             font-size: 13px;
@@ -98,17 +153,18 @@
         }
 
         .btn:active {
-            box-shadow: 0px 0px 0px #2c4c2c;
+            box-shadow: 0px 0px 0px #6b1d1d;
             transform: translate(3px, 3px);
         }
 
         .status-bar {
-            border-top: 2px dashed #2c4c2c;
+            border-top: 2px dashed #6b1d1d;
             margin-top: 20px;
             padding-top: 10px;
             font-size: 12px;
             display: flex;
             justify-content: space-between;
+            color: #4a341e;
         }
 
         #reg-window {
@@ -131,16 +187,11 @@
         .input-text {
             width: 100%;
             padding: 8px;
-            border: 2px solid #2c4c2c;
+            border: 3px solid #6b1d1d;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
-            background: #fbfdfb;
-        }
-
-        .input-text:focus {
-            outline: none;
-            background: #ffffff;
+            background: #fffcf2;
         }
 
         .avatar-grid {
@@ -148,9 +199,9 @@
             grid-template-columns: repeat(6, 1fr);
             gap: 8px;
             margin-top: 5px;
-            background: #f0fbf0;
+            background: #fffcf2;
             padding: 8px;
-            border: 1px dashed #2c4c2c;
+            border: 2px solid #6b1d1d;
         }
 
         .avatar-option {
@@ -162,21 +213,21 @@
         }
 
         .avatar-option:hover {
-            background: #bcedbc;
+            background: #f7b859;
         }
 
         .avatar-option.selected {
-            border-color: #2c4c2c;
-            background: #fff3cd;
+            border-color: #6b1d1d;
+            background: #872525;
         }
 
         #profile-widget {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #ffffff;
-            border: 2px solid #2c4c2c;
-            box-shadow: 4px 4px 0px #8ebf8e;
+            background: #f7e3af;
+            border: 3px solid #6b1d1d;
+            box-shadow: 4px 4px 0px #351010;
             padding: 10px;
             display: none;
             align-items: center;
@@ -186,7 +237,7 @@
         }
 
         #profile-widget:hover {
-            background: #fbfdfb;
+            background: #fffcf2;
         }
 
         #widget-avatar {
@@ -196,10 +247,7 @@
         #widget-name {
             font-weight: bold;
             font-size: 13px;
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            color: #6b1d1d;
         }
 
         #edit-window {
@@ -210,8 +258,8 @@
         }
 
         .user-info-card {
-            background: #fff3cd;
-            border: 2px dashed #2c4c2c;
+            background: #f7b859;
+            border: 2px dashed #6b1d1d;
             padding: 12px;
             margin-top: 15px;
             display: flex;
@@ -230,25 +278,26 @@
         .user-info-name {
             font-weight: bold;
             margin-bottom: 4px;
+            color: #6b1d1d;
         }
     </style>
 </head>
 <body>
 
     <div id="profile-widget" onclick="openEdit()">
-        <div id="widget-avatar">🍡</div>
+        <div id="widget-avatar">🍒</div>
         <div id="widget-name">Guest</div>
     </div>
 
     <div id="reg-window" class="window">
         <div class="window-header">
-            <span class="window-title">✧ sign_up.exe ✦</span>
+            <span class="window-title">sign_up.exe</span>
             <div class="window-dots"><span></span><span></span><span></span></div>
         </div>
         <div class="window-body">
             <div class="form-group">
                 <label>username:</label>
-                <input type="text" id="reg-username" class="input-text" value="anonymous">
+                <input type="text" id="reg-username" class="input-text" value="локисик">
             </div>
             <div class="form-group">
                 <label>bio:</label>
@@ -266,7 +315,7 @@
 
     <div id="main-window" class="window">
         <div class="window-header">
-            <span class="window-title">✧ nura.exe ✦</span>
+            <span class="window-title">nura.exe</span>
             <div class="window-dots"><span></span><span></span><span></span></div>
         </div>
         <div class="window-body">
@@ -274,11 +323,19 @@
             
             <h1>nura</h1>
             <div class="slogan">一癖あるインターネット</div>
+
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="search-bar" class="search-input" placeholder="Search internet..." oninput="showSuggestions(this.value)">
+                    <button class="btn">Find</button>
+                </div>
+                <div id="suggestions" class="suggestions-box"></div>
+            </div>
             
             <p>✦ entry_001.log</p>
             
             <div class="user-info-card">
-                <div class="user-info-avatar" id="main-display-avatar">🍡</div>
+                <div class="user-info-avatar" id="main-display-avatar">🍒</div>
                 <div class="user-info-text">
                     <div class="user-info-name" id="main-display-name">Guest</div>
                     <div id="main-display-bio">...</div>
@@ -287,7 +344,7 @@
             
             <div style="margin-top: 25px;">
                 <a class="btn">enter</a>
-                <a class="btn" style="background: #ffd3e2;">index</a>
+                <a class="btn" style="background: #ffcbdc;">index</a>
             </div>
 
             <div class="status-bar">
@@ -299,32 +356,17 @@
 
     <div id="edit-window" class="window">
         <div class="window-header">
-            <span class="window-title">✧ edit_profile.exe ✦</span>
-            <div class="window-dots"><span onclick="closeEdit()"></span><span></span><span></span></div>
-        </div>
-        <div class="window-body">
-            <div class="form-group">
-                <label>edit username:</label>
-                <input type="text" id="edit-username" class="input-text">
-            </div>
-            <div class="form-group">
-                <label>edit bio:</label>
-                <input type="text" id="edit-bio" class="input-text">
-            </div>
-            <div class="form-group">
-                <label>edit avatar:</label>
-                <div class="avatar-grid" id="edit-avatar-grid"></div>
-            </div>
-            <div style="margin-top: 20px; display: flex; justify-content: space-between;">
-                <button class="btn" style="background: #ffcbdc;" onclick="closeEdit()">cancel</button>
-                <button class="btn" onclick="saveEdit()">update</button>
-            </div>
-        </div>
-    </div>   
-    
+            <span class="window-title">edit_profile.exe</span>
     <script>
         const emojis = ['🍡', '🎀', '🥕', '🦋', '🪀', '🎱', '🍔', '🍒', '🥝', '🍏', '🍎', '🍧', '🍮', '🥮', '🍭', '🍰', '🌰', '🍯', '🍬', '🥛', '🍼', '🎸', '🩰', '🎨', '🥳'];
-        let selectedAvatar = emojis[0];
+        let selectedAvatar = '🍒';
+
+        const searchItems = [
+            "hatsune miku",
+            "apple pie recipe",
+            "neko",
+            "lookooooooo(✿◠‿◠)"
+        ];
 
         function initAvatars(gridId, onClickCallback) {
             const grid = document.getElementById(gridId);
@@ -343,12 +385,42 @@
             });
         }
 
+        function showSuggestions(val) {
+            const box = document.getElementById('suggestions');
+            box.innerHTML = '';
+            if (!val) {
+                box.style.display = 'none';
+                return;
+            }
+            const filtered = searchItems.filter(item => item.toLowerCase().includes(val.toLowerCase()));
+            if (filtered.length === 0) {
+                box.style.display = 'none';
+                return;
+            }
+            filtered.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.textContent = item;
+                div.onclick = () => {
+                    document.getElementById('search-bar').value = item;
+                    box.style.display = 'none';
+                };
+                box.appendChild(div);
+            });
+            box.style.display = 'block';
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('search-input')) {
+                document.getElementById('suggestions').style.display = 'none';
+            }
+        });
+
         function saveRegistration() {
-            const username = document.getElementById('reg-username').value || 'anonymous';
-            const bio = document.getElementById('reg-bio').value || '...';
+            const username = document.getElementById('reg-username').value || 'локисик';
+            const bio = document.getElementById('reg-bio').value || 'just another internet surfer';
             
             localStorage.setItem('nura_user', JSON.stringify({ username, bio, avatar: selectedAvatar }));
-            
             applyUserData(username, bio, selectedAvatar);
             
             document.getElementById('reg-window').style.display = 'none';
@@ -381,8 +453,8 @@
         }
 
         function saveEdit() {
-            const username = document.getElementById('edit-username').value || 'anonymous';
-            const bio = document.getElementById('edit-bio').value || '...';
+            const username = document.getElementById('edit-username').value || 'локисик';
+            const bio = document.getElementById('edit-bio').value || 'just another internet surfer';
 
             localStorage.setItem('nura_user', JSON.stringify({ username, bio, avatar: selectedAvatar }));
             applyUserData(username, bio, selectedAvatar);
@@ -404,3 +476,4 @@
             }
         };
     </script>
+</body></html>
