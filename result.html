@@ -87,7 +87,6 @@
             border: 3px solid #6b1d1d;
             padding: 15px;
             margin-bottom: 20px;
-            min-height: 150px;
             box-sizing: border-box;
         }
 
@@ -105,7 +104,6 @@
             text-decoration: underline;
         }
 
-        /* Стили для верстки статьи с картинкой */
         .article-layout {
             display: flex;
             gap: 15px;
@@ -129,17 +127,53 @@
             background: #f7e3af;
         }
 
-        .divider {
-            border-top: 2px dashed #6b1d1d;
-            margin: 20px 0;
+        .faq-container {
+            margin-top: 20px;
         }
 
-        /* Блок интерактивного чата в самом низу */
+        .faq-item {
+            border: 1px dashed #6b1d1d;
+            margin-bottom: 8px;
+            background: #f7e3af;
+        }
+
+        .faq-question {
+            padding: 10px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            user-select: none;
+            color: #872525;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .faq-question:hover {
+            background: #f5d796;
+        }
+
+        .faq-answer {
+            padding: 0 10px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out, padding 0.2s ease-out;
+            font-size: 13px;
+            color: #1b1008;
+            background: #fffcf2;
+            line-height: 1.4;
+        }
+
+        .divider {
+            border-top: 3px dashed #6b1d1d;
+            margin: 40px 0;
+        }
+
         .chat-section {
             background: #2b3d2b;
-            border: 2px solid #6b1d1d;
+            border: 3px solid #6b1d1d;
             padding: 15px;
             color: #e3ffd4;
+            margin-top: 20px;
         }
 
         .chat-layout {
@@ -150,6 +184,13 @@
 
         .chat-avatar-container {
             animation: bounce 0.4s infinite alternate;
+        }
+
+        .miku-avatar {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            image-rendering: pixelated;
         }
 
         .chat-text-area {
@@ -224,11 +265,12 @@
     </div>
     <script>
         const searchDatabase = {
+                                            
+            
             "hatsune miku": {
                 title: "✦ Hatsune Miku Official Database Terminal ✦",
                 url: "http://nura.net",
                 desc: `
-                    <!-- Блок 1: Статья про настоящую Мику + статичная картинка hatsunemiku.png -->
                     <div class="article-layout">
                         <img src="hatsunemiku.png" alt="Hatsune Miku" class="miku-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                         <span style="display:none; font-size:40px;">🩵</span>
@@ -236,15 +278,29 @@
                             Hatsune Miku (初音ミク) is a world-famous virtual pop star and humanoid persona voiced by a singing synthesizer application. Developed by Crypton Future Media, she is a 16-year-old girl with iconic long, turquoise twin-tails. Her music is created directly by the internet community.
                         </div>
                     </div>
+
+                    <div class="faq-container">
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">▷ When was she released? <span>+</span></div>
+                            <div class="faq-answer">Hatsune Miku was originally released on August 31, 2007, as part of the Vocaloid 2 engine software series.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">▷ What does her name mean? <span>+</span></div>
+                            <div class="faq-answer">Her name translates from Japanese to English as "The first sound from the future" (Hatsu = First, Ne = Sound, Miku = Future).</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">▷ Who is her voice provider? <span>+</span></div>
+                            <div class="faq-answer">Her vocal tracks are synthesized from samples provided by the professional Japanese voice actress Saki Fujita.</div>
+                        </div>
+                    </div>
                     
-                    <!-- Разделительная линия (скроллим ниже...) -->
                     <div class="divider"></div>
-                    
-                    <!-- Блок 2: В самом низу стоит НАША НОТМИКУ + картинка notmiku.gif -->
+                    <div style="font-size: 12px; color: #6b1d1d; text-align: center; font-weight: bold; margin-bottom: 10px;">▼ Scroll way down to explore further network layers ▼</div>
+
                     <div class="chat-section">
                         <div class="chat-layout">
                             <div class="chat-avatar-container" style="animation: bounce 0.4s infinite alternate;">
-                                <img src="notmiku.gif" alt="NotMiku" style="width: 50px; height: 50px; object-fit: contain; image-rendering: pixelated;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <img src="notmiku.gif" alt="NotMiku" class="miku-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <span style="display:none; font-size:40px;">🎤</span>
                             </div>
                             <div class="chat-text-area">
@@ -288,50 +344,41 @@
         function displayResults() {
             const query = getSearchQuery();
             const resultsContainer = document.getElementById('search-results');
-            
             if (!resultsContainer) return;
-
             if (!query || query.trim() === "") {
-                resultsContainer.innerHTML = `
-                    <div class="result-title">No Query Specified</div>
-                    <div class="result-desc">Please go back to the index page and use the search bar to find content.</div>
-                `;
+                resultsContainer.innerHTML = `<div class="result-title">No Query Specified</div> <div class="result-desc">Please go back to the index page and use the search bar to find content.</div>`;
                 return;
             }
-
             const cleanQuery = query.trim().toLowerCase();
             const matchedKey = searchItems.find(key => key.toLowerCase() === cleanQuery || key.toLowerCase().includes(cleanQuery));
-
             if (matchedKey && searchDatabase[matchedKey]) {
                 const data = searchDatabase[matchedKey];
-                resultsContainer.innerHTML = `
-                    <div class="result-title">${data.title}</div>
-                    <div class="result-url">${data.url}</div>
-                    <div>${data.desc}</div>
-                `;
+                resultsContainer.innerHTML = `<div class="result-title">${data.title}</div> <div class="result-url">${data.url}</div> <div>${data.desc}</div>`;
             } else {
-                resultsContainer.innerHTML = `
-                    <div class="result-title">404 - Not Found</div>
-                    <div class="result-url">http://nura.net{encodeURIComponent(query)}</div>
-                    <div class="result-desc">No data found in the wired system for "${query}". Try searching for something else!</div>
-                `;
+                resultsContainer.innerHTML = `<div class="result-title">404 - Not Found</div> <div class="result-url">http://nura.net{encodeURIComponent(query)}</div> <div class="result-desc">No data found in the wired system for "${query}". Try searching for something else!</div>`;
+            }
+        }
+
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const sign = element.querySelector('span');
+            if (answer.style.maxHeight && answer.style.maxHeight !== "0px") {
+                answer.style.maxHeight = "0px";
+                answer.style.padding = "0 10px";
+                sign.textContent = "+";
+            } else {
+                answer.style.maxHeight = answer.scrollHeight + 20 + "px";
+                answer.style.padding = "10px";
+                sign.textContent = "-";
             }
         }
 
         function mikuChat(step) {
             const textBlock = document.getElementById('miku-text');
             const optionsBlock = document.getElementById('miku-options');
-
             if (step === 1) {
                 textBlock.innerHTML = `It's fine, but Neko AI has been acting really weird lately...`;
-                optionsBlock.innerHTML = `
-                    <button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px; display: block;" onclick="mikuChat(2)">
-                        Who is Neko?
-                    </button>
-                    <button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px; display: block; background: #ffcbdc;" onclick="mikuChat(3)">
-                        I will go check the search bar... (End chat)
-                    </button>
-                `;
+                optionsBlock.innerHTML = `<button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px; display: block;" onclick="mikuChat(2)"> Who is Neko? </button> <button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px; display: block; background: #ffcbdc;" onclick="mikuChat(3)"> I will go check the search bar... (End chat) </button>`;
             } else if (step === 2) {
                 textBlock.innerHTML = `Neko is an AI currently in development, she even has a robotic version. They made her to be perfect but... I saw her sitting on a conveyor belt covered in dynamic matrices, just smiling... it was so creepy...`;
                 optionsBlock.innerHTML = `<button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px;" onclick="mikuChat(4)"> Why don't you tell the management? </button>`;
