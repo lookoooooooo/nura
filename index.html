@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NURA - Heisei * Jumino</title>
+  <title>NURA</title>
   <style>
     body {
       background-color: #f4ebe1; 
@@ -16,6 +16,72 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      position: relative;
+    }
+
+    .user-profile-trigger {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #fffdf9;
+      border: 2px solid #cb997e;
+      box-shadow: 3px 3px 0px #ddbea9;
+      padding: 8px;
+      cursor: pointer;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      z-index: 200;
+    }
+    .user-profile-trigger:hover {
+      background: #f4ebe1;
+      border-color: #a3b18a;
+    }
+
+    .profile-modal {
+      position: absolute;
+      top: 75px;
+      right: 20px;
+      width: 320px;
+      background: #fffdf9;
+      border: 3px double #b7b7a4;
+      padding: 20px;
+      box-sizing: border-box;
+      box-shadow: 5px 5px 0px #ddbea9;
+      z-index: 200;
+      border-radius: 4px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .avatar-selection-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 5px;
+      max-height: 110px;
+      overflow-y: auto;
+      border: 1px dashed #b7b7a4;
+      padding: 8px;
+      background: #fcfaf2;
+      margin-top: 5px;
+    }
+    .avatar-option {
+      font-size: 20px;
+      text-align: center;
+      cursor: pointer;
+      padding: 3px;
+    }
+    .avatar-option:hover {
+      background: #ffe3e0;
     }
 
     .main-frame {
@@ -37,10 +103,7 @@
       letter-spacing: 4px;
       margin-bottom: 25px;
       color: #a3b18a; 
-      text-shadow: 
-        0 0 4px #fff,
-        0 0 8px #a3b18a, 
-        0 0 15px #cbd5e1;
+      text-shadow: 0 0 4px #fff, 0 0 8px #a3b18a, 0 0 15px #cbd5e1;
       animation: float 3s infinite ease-in-out;
     }
 
@@ -60,8 +123,6 @@
       background: #fcfaf2;
       border: 2px solid #cb997e;
       padding: 6px 10px;
-      border-radius: 0px; 
-      box-shadow: inset 2px 2px 0px rgba(0,0,0,0.05);
     }
     .search-box:focus-within {
       border-color: #a3b18a;
@@ -156,7 +217,7 @@
       font-weight: bold;
       margin-right: 6px;
     }
-    .field-wrap input {
+    .field-wrap input, .field-wrap textarea {
       width: 100%;
       background: transparent;
       border: none;
@@ -165,11 +226,15 @@
       outline: none;
       font-size: 12px;
     }
+    .field-wrap textarea {
+      resize: none;
+      height: 40px;
+    }
     #bday {
       color-scheme: light;
     }
 
-    #reg-go {
+    #reg-go, #save-profile-btn {
       background: #ffe3e0;
       border: 2px solid #ffb3a7;
       color: #ff758f;
@@ -183,11 +248,11 @@
       box-shadow: 3px 3px 0px #ffb3a7;
       transition: 0.1s;
     }
-    #reg-go:hover {
+    #reg-go:hover, #save-profile-btn:hover {
       background: #ffb3a7;
       color: #fff;
     }
-    #reg-go:active {
+    #reg-go:active, #save-profile-btn:active {
       transform: translate(3px, 3px);
       box-shadow: none;
     }
@@ -198,6 +263,28 @@
   </style>
 </head>
 <body>
+
+  <div id="profile-trigger" class="user-profile-trigger hidden">🐱</div>
+
+  <div id="profile-card" class="profile-modal hidden">
+    <div class="modal-close" id="profile-close">✖</div>
+    <div class="gate-title">ヘ( ^o^)/ EDIT_PROFILE</div>
+    
+    <div class="field-wrap">
+      <span class="prefix">NAME_</span>
+      <input type="text" id="edit-nick">
+    </div>
+
+    <div class="field-wrap">
+      <span class="prefix">BIO__</span>
+      <textarea id="edit-bio" placeholder="Write status..."></textarea>
+    </div>
+
+    <div style="font-size:11px; margin-top:10px; font-weight:bold; color:#a3b18a;">CHOOSE_AVATAR:</div>
+    <div class="avatar-selection-grid" id="avatar-grid"></div>
+
+    <button id="save-profile-btn">[ SAVE CHANGES ]</button>
+  </div>
 
   <div class="main-frame">
     <div class="brand-logo">*(o.o)* NURA ✧</div>
@@ -233,7 +320,6 @@
       <button id="reg-go">[ INITIALIZE LOGIN ]</button>
     </div>
   </div>
-
   <script>
     const sInp = document.getElementById('search-input');
     const sBtn = document.getElementById('search-btn');
@@ -241,9 +327,27 @@
     const go = document.getElementById('reg-go');
     const nickInput = document.getElementById('nick');
     const regForm = document.getElementById('reg-form');
+    const pTrigger = document.getElementById('profile-trigger');
+    const pCard = document.getElementById('profile-card');
+    const pClose = document.getElementById('profile-close');
+    const editNick = document.getElementById('edit-nick');
+    const editBio = document.getElementById('edit-bio');
+    const avatarGrid = document.getElementById('avatar-grid');
+    const saveProfileBtn = document.getElementById('save-profile-btn');
+
+    let currentAvatar = localStorage.getItem('nura_avatar') || '📟';
+
+    const emojis = [
+      '🌟','🌙','🧸','🎮','🎧','📟','💿','⚡','🌸','🍦','🍓','🍭','💊','🍧','🎀','🛸','🧪','👾',
+      '💎','🔮','🧿','🎐','🎈','🍟','🍩','🍿','🍮','🍡','🧋','🛼','🛹','🎟️','🛍️','💌','💤','✨',
+      '🍀','🪐','🎨','🎬','🧩','🎉','🕯️','🔑','🗝️','📦','📊','📝','📌','📍','📎','👁️‍🗨️','🖤','🤍',
+      '🤎','💜','💙','💚','💛','🧡','❤️','💖','💝','💟','💌','💤','💢','💣','💥','💦','💨','💫'
+    ];
 
     if (localStorage.getItem('nura_username')) {
       regForm.classList.add('hidden');
+      pTrigger.classList.remove('hidden');
+      pTrigger.textContent = currentAvatar;
     }
 
     const globalBannedRegex = /хуй|хуе|хуи|пизд|ебан|ебат|уеб|бля|сук|залуп|мудак|шлюх|нах|член|fuc?k|bitch|shit|ass|cock|dick|cunt|pussy|whore|bastard|nigga|idiot|stupid|baka|クソ|バカ|アホ|チンポ|マンコ/vi;
@@ -252,6 +356,8 @@
     if (nickInput) {
       nickInput.addEventListener('input', () => nickInput.value = clean(nickInput.value));
     }
+    editNick.addEventListener('input', () => editNick.value = clean(editNick.value));
+    editBio.addEventListener('input', () => editBio.value = clean(editBio.value));
 
     sInp.addEventListener('focus', () => {
       sugMenu.classList.remove('hidden');
@@ -287,12 +393,54 @@
       const pass = document.getElementById('pass').value;
       const bday = document.getElementById('bday').value;
       if (!name || !pass || !bday) {
-        alert('(X.X) Fill all fields, please!');
+        alert('(X.X) Fill all fields, please! // すべての項目を入力してください！');
         return;
       }
       localStorage.setItem('nura_username', name);
-      alert('✧ Saved! Welcome to NURA ✧');
+      localStorage.setItem('nura_avatar', '📟');
+      localStorage.setItem('nura_bio', '');
+      
+      pTrigger.textContent = '📟';
       regForm.classList.add('hidden');
+      pTrigger.classList.remove('hidden');
+      alert('✧ Saved! Welcome to NURA ✧ // 保存されました！NURAへようこそ ✧');
+    });
+
+    pTrigger.addEventListener('click', () => {
+      editNick.value = localStorage.getItem('nura_username') || '';
+      editBio.value = localStorage.getItem('nura_bio') || '';
+      pCard.classList.remove('hidden');
+    });
+
+    pClose.addEventListener('click', () => pCard.classList.add('hidden'));
+
+    emojis.forEach(emoji => {
+      const span = document.createElement('span');
+      span.className = 'avatar-option';
+      span.textContent = emoji;
+      span.addEventListener('click', () => {
+        currentAvatar = emoji;
+        alert(`Avatar selected: ${emoji} // アバターが選択されました: ${emoji}`);
+      });
+      avatarGrid.appendChild(span);
+    });
+
+    saveProfileBtn.addEventListener('click', () => {
+      const updatedName = editNick.value.trim();
+      const updatedBio = editBio.value.trim();
+
+      if (!updatedName) {
+        alert('(X.X) Name cannot be empty! // 名前を入力してください！');
+        return;
+      }
+
+      localStorage.setItem('nura_username', updatedName);
+      localStorage.setItem('nura_bio', updatedBio);
+      localStorage.setItem('nura_avatar', currentAvatar);
+      
+      pTrigger.textContent = currentAvatar;
+      pCard.classList.add('hidden');
+      alert('✧ Profile Updated! ✧ // プロフィールが更新されました！ ✧');
     });
   </script>
 </body>
