@@ -82,13 +82,12 @@
             font-size: 13px;
         }
 
-        /* Это то самое белое окно со скриншота */
         .search-results-area {
             background: #fffcf2;
             border: 3px solid #6b1d1d;
             padding: 15px;
             margin-bottom: 20px;
-            min-height: 150px; /* Сделали чуть повыше для текста */
+            min-height: 150px;
             box-sizing: border-box;
         }
 
@@ -102,13 +101,65 @@
         .result-url {
             font-size: 12px;
             color: #4a341e;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             text-decoration: underline;
         }
 
-        .result-desc {
+        /* Стили для верстки статьи с картинкой */
+        .article-layout {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .article-text {
             font-size: 14px;
             color: #1b1008;
+            line-height: 1.5;
+        }
+
+        .miku-image {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            image-rendering: pixelated;
+            border: 2px dashed #6b1d1d;
+            padding: 4px;
+            background: #f7e3af;
+        }
+
+        .divider {
+            border-top: 2px dashed #6b1d1d;
+            margin: 20px 0;
+        }
+
+        /* Блок интерактивного чата в самом низу */
+        .chat-section {
+            background: #2b3d2b;
+            border: 2px solid #6b1d1d;
+            padding: 15px;
+            color: #e3ffd4;
+        }
+
+        .chat-layout {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .chat-avatar-container {
+            animation: bounce 0.4s infinite alternate;
+        }
+
+        .chat-text-area {
+            flex-grow: 1;
+        }
+
+        #miku-text {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .btn {
@@ -140,13 +191,6 @@
             color: #4a341e;
         }
 
-        .miku-avatar {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            image-rendering: pixelated;
-        }
-
         @keyframes bounce { 
             from { transform: translateY(0); } 
             to { transform: translateY(-5px); } 
@@ -166,7 +210,6 @@
             <h1>nura</h1>
             <div class="slogan">一癖あるインターネット</div>
 
-            <!-- Идентификатор id="search-results" теперь жестко привязан к белому блоку -->
             <div id="search-results" class="search-results-area"></div>
             
             <div style="margin-top: 25px;">
@@ -182,43 +225,55 @@
     <script>
         const searchDatabase = {
             "hatsune miku": {
-                title: "✦ NotMiku Secret Network Terminal ✦",
+                title: "✦ Hatsune Miku Official Database Terminal ✦",
                 url: "http://nura.net",
-                desc: `Anomalous entity detected in the sub-layers of nura.exe. Operating outside standard digital parameters.
-                
-                <div style="margin-top: 25px; padding: 15px; background: #2b3d2b; border: 2px dashed #f7b859; color: #e3ffd4;">
-                    <div style="display: flex; gap: 15px; align-items: center;">
-                        <div style="animation: bounce 0.4s infinite alternate;">
-                            <img src="notmiku.gif" alt="NotMiku" class="miku-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <span style="display:none; font-size:40px;">🎤</span>
+                desc: `
+                    <!-- Блок 1: Статья и картинка сверху -->
+                    <div class="article-layout">
+                        <img src="notmiku.gif" alt="Hatsune Miku" class="miku-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <span style="display:none; font-size:40px;">🎤</span>
+                        <div class="article-text">
+                            Hatsune Miku (初音ミク) is a world-famous virtual pop star and humanoid persona voiced by a singing synthesizer application. Developed by Crypton Future Media, she is a 16-year-old girl with iconic long, turquoise twin-tails. Her music is created directly by the internet community.
                         </div>
-                        <div style="flex-grow: 1;">
-                            <div id="miku-text" style="font-size: 13px; font-weight: bold; margin-bottom: 10px;">
-                                Hello! I am NotMiku, a reference-gif! What do you want to ask? (っゝω・)つ
+                    </div>
+                    
+                    <!-- Разделительная линия -->
+                    <div class="divider"></div>
+                    
+                    <!-- Блок 2: Интерактивный чат внизу -->
+                    <div class="chat-section">
+                        <div class="chat-layout">
+                            <div class="chat-avatar-container">
+                                <span style="font-size:40px;">🎤</span>
                             </div>
-                            <div id="miku-options">
-                                <button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px;" onclick="mikuChat(1)">
-                                    How is your life?
-                                </button>
+                            <div class="chat-text-area">
+                                <div id="miku-text">
+                                    Hello! I am NotMiku, a reference-gif! What do you want to ask? (っゝω・)つ
+                                </div>
+                                <div id="miku-options">
+                                    <button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px;" onclick="mikuChat(1)">
+                                        How is your life?
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>`
+                `
             },
             "apple pie recipe": {
                 title: "🍏 Grandma's Oldschool Apple Pie 🍏",
                 url: "http://nura.net",
-                desc: "Ingredients: 6 sweet apples, stardust, cinnamon, and 100g of sweet sugar. Bake inside an old desktop machine at 180C."
+                desc: "<div class='article-text'>Ingredients: 6 sweet apples, stardust, cinnamon, and 100g of sweet sugar. Bake inside an old desktop machine at 180C.</div>"
             },
             "neko": {
                 title: "✧ Nyantastic Web Portal ✧",
                 url: "http://nura.net",
-                desc: "Meow! Welcome to the net-space of digital cats. Status: sleeping on the keyboard."
+                desc: "<div class='article-text'>Meow! Welcome to the net-space of digital cats. Status: sleeping on the keyboard.</div>"
             },
             "lookooooooo(✿◠‿◠)": {
                 title: "★ lookooooooo - Ultimate Space ★",
                 url: "http://nura.net",
-                desc: "The true legend and creator of nura.exe interface. Surf the wired, fortune favors the bold!"
+                desc: "<div class='article-text'>The true legend and creator of nura.exe interface. Surf the wired, fortune favors the bold!</div>"
             }
         };
 
@@ -251,7 +306,7 @@
                 resultsContainer.innerHTML = `
                     <div class="result-title">${data.title}</div>
                     <div class="result-url">${data.url}</div>
-                    <div class="result-desc">${data.desc}</div>
+                    <div>${data.desc}</div>
                 `;
             } else {
                 resultsContainer.innerHTML = `
