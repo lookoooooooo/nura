@@ -1,259 +1,296 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NURA - Database Logs</title>
-  <style>
-    body {
-      background-color: #f4ebe1; 
-      background-image: radial-gradient(#e3d5ca 2px, transparent 2px);
-      background-size: 16px 16px;
-      color: #6b5b52;
-      font-family: 'MS Gothic', 'Courier New', monospace;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-      min-height: 100vh;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✧ nura - search results ✧</title>
+    <style>
+        @import url('https://googleapis.com');
 
-    .nav-header {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
+        body {
+            background-color: #1e351e; 
+            background-image: radial-gradient(#152515 15%, transparent 16%);
+            background-size: 16px 16px;
+            font-family: 'Courier Prime', 'Courier', monospace;
+            color: #1b1008;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
 
-    .back-home {
-      color: #cb997e;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: bold;
-    }
-    .back-home:hover {
-      color: #a3b18a;
-    }
+        .window {
+            background: #f7e3af;
+            border: 3px solid #6b1d1d;
+            box-shadow: 6px 6px 0px #351010;
+            max-width: 600px;
+            width: 100%;
+            margin-top: 40px;
+            image-rendering: pixelated;
+        }
 
-    .user-badge {
-      font-size: 12px;
-      background: #fffdf9;
-      border: 1px solid #b7b7a4;
-      padding: 6px 12px;
-      border-radius: 2px;
-      text-align: right;
-    }
-    .user-bio-text {
-      font-size: 10px;
-      color: #a3b18a;
-      margin-top: 2px;
-    }
+        .window-header {
+            background: #872525;
+            color: #ffe6bd;
+            padding: 8px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            border-bottom: 3px solid #6b1d1d;
+        }
 
-    .avatar-vault-box {
-      width: 100%;
-      max-width: 600px;
-      background: #fffdf9;
-      border: 2px dashed #cb997e;
-      padding: 15px;
-      margin-bottom: 20px;
-      box-sizing: border-box;
-    }
-    .vault-title {
-      font-size: 12px;
-      font-weight: bold;
-      color: #cb997e;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-    }
-    .avatar-selection-grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 6px;
-      padding: 5px;
-      background: #fcfaf2;
-    }
-    .avatar-option {
-      font-size: 22px;
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
-    }
-    .avatar-option:hover {
-      background: #ffe3e0;
-      transform: scale(1.1);
-    }
+        .window-dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #f7e3af;
+            border: 2px solid #6b1d1d;
+            margin-left: 4px;
+            cursor: pointer;
+        }
 
-    .results-frame {
-      width: 100%;
-      max-width: 600px;
-      background: #fffdf9;
-      border: 4px double #b7b7a4; 
-      padding: 25px;
-      box-sizing: border-box;
-      border-radius: 4px;
-      box-shadow: 6px 6px 0px #ddbea9;
-    }
+        .window-body {
+            padding: 20px;
+            line-height: 1.5;
+        }
 
-    .query-header {
-      font-size: 16px;
-      border-bottom: 2px dashed #cb997e;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-    }
+        h1 {
+            font-size: 28px;
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #6b1d1d;
+        }
 
-    .query-text {
-      color: #a3b18a;
-      font-weight: bold;
-    }
+        .slogan {
+            font-size: 16px;
+            font-weight: bold;
+            color: #4a341e;
+            margin-bottom: 20px;
+        }
 
-    .log-item {
-      background: #f7f9f4;
-      border: 1px solid #b7b7a4;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
-    .log-item:hover {
-      border-color: #cb997e;
-      background: #fffdf9;
-    }
+        marquee {
+            background: #2b3d2b;
+            color: #e3ffd4;
+            border: 2px solid #6b1d1d;
+            padding: 5px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
 
-    .log-title {
-      font-size: 14px;
-      font-weight: bold;
-      color: #cb997e;
-      text-decoration: none;
-      display: block;
-      margin-bottom: 5px;
-    }
-    .log-title:hover {
-      text-decoration: underline;
-    }
+        .search-results-area {
+            background: #fffcf2;
+            border: 3px solid #6b1d1d;
+            padding: 15px;
+            margin-bottom: 20px;
+            min-height: 100px;
+        }
 
-    .log-meta {
-      font-size: 11px;
-      color: #a3b18a;
-      margin-bottom: 8px;
-    }
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #872525;
+            margin-bottom: 5px;
+        }
 
-    .log-snippet {
-      font-size: 12px;
-      line-height: 1.4;
-    }
+        .result-url {
+            font-size: 12px;
+            color: #4a341e;
+            margin-bottom: 8px;
+            text-decoration: underline;
+        }
 
-    .no-results {
-      text-align: center;
-      padding: 40px 0;
-      font-size: 14px;
-    }
-  </style>
+        .result-desc {
+            font-size: 14px;
+            color: #1b1008;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #f7b859;
+            border: 2px solid #6b1d1d;
+            padding: 8px 16px;
+            color: #2b1100;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 3px 3px 0px #6b1d1d;
+            cursor: pointer;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .btn:active {
+            box-shadow: 0px 0px 0px #6b1d1d;
+            transform: translate(3px, 3px);
+        }
+
+        .status-bar {
+            border-top: 2px dashed #6b1d1d;
+            margin-top: 20px;
+            padding-top: 10px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            color: #4a341e;
+        }
+
+        .miku-avatar {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            image-rendering: pixelated;
+        }
+
+        @keyframes bounce { 
+            from { transform: translateY(0); } 
+            to { transform: translateY(-5px); } 
+        }
+    </style>
 </head>
 <body>
 
-  <div class="nav-header">
-    <a href="index.html" class="back-home">◀ RETURN TO NURA</a>
-    <div class="user-badge">
-      <div id="user-display">GUEST_MODE</div>
-      <div id="user-bio-display" class="user-bio-text"></div>
-    </div>
-  </div>
-
-  <div class="avatar-vault-box">
-    <div class="vault-title">✦ NURA_AVATAR_VAULT (CLICK TO CHANGE) ✦</div>
-    <div class="avatar-selection-grid" id="avatar-grid"></div>
-  </div>
-
-  <div class="results-frame">
-    <div class="query-header">
-      SEARCH_LOG // TARGET: <span id="target-query" class="query-text">None</span>
-    </div>
-
-    <div id="results-container"></div>
-  </div>
-
-  <script>
-    const emojis = [
-      '🌟','🌙','🧸','🎮','🎧','📟','💿','⚡','🌸','🍦','🍓','🍭','💊','🍧','🎀','🛸','🧪','👾',
-      '💎','🔮','🧿','🎐','🎈','🍟','🍩','🍿','🍮','🍡','🧋','🛼','🛹','🎟️','🛍️','💌','💤','✨',
-      '🍀','🪐','🎨','🎬','🧩','🎉','🕯️','🔑','🗝️','📦','📊','📝','📌','📍','📎','👁️‍🗨️','🖤','🤍',
-      '🤎','💜','💙','💚','💛','🧡','❤️','💖','💝','💟','💌','💤','💢','💣','💥','💦','💨','💫'
-    ];
-
-    function renderUserBadge() {
-      const username = localStorage.getItem('nura_username');
-      const avatar = localStorage.getItem('nura_avatar') || '📟';
-      const bio = localStorage.getItem('nura_bio') || '';
-      
-      if (username) {
-        document.getElementById('user-display').textContent = `${avatar} OPERATOR: ${username.toUpperCase()}`;
-        document.getElementById('user-bio-display').textContent = bio ? `STATUS: ${bio}` : '';
-      }
-    }
-    renderUserBadge();
-
-    const avatarGrid = document.getElementById('avatar-grid');
-    emojis.forEach(emoji => {
-      const span = document.createElement('span');
-      span.className = 'avatar-option';
-      span.textContent = emoji;
-      span.addEventListener('click', () => {
-        localStorage.setItem('nura_avatar', emoji);
-        renderUserBadge();
-      });
-      avatarGrid.appendChild(span);
-    });
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get('q') ? urlParams.get('q').trim().toLowerCase() : '';
-    document.getElementById('target-query').textContent = query ? `"${query}"` : 'ALL_LOGS';
-
-    const container = document.getElementById('results-container');
-    const globalBannedRegex = /хуй|хуе|хуи|пизд|ебан|ебат|уеб|бля|сук|залуп|мудак|шлюх|нах|член|fuc?k|bitch|shit|ass|cock|dick|cunt|pussy|whore|bastard|nigga|idiot|stupid|baka|クソ|バка|アホ|チンポ|マンコ/vi;
-    function clean(text) { return text.replace(globalBannedRegex, '***'); }
-    const cleanQuery = clean(query);
-
-    fetch('database.json')
-      .then(response => response.json())
-      .then(mockDatabase => {
-        const matchedResults = mockDatabase.filter(item => {
-          if (!cleanQuery) return true;
-          return item.tags.some(tag => tag.includes(cleanQuery)) || 
-                 item.title.toLowerCase().includes(cleanQuery) || 
-                 item.snippet.toLowerCase().includes(cleanQuery);
-        });
-
-        if (matchedResults.length === 0) {
-          container.innerHTML = `
-            <div class="no-results">
-              (X._.X)<br><br>
-              NO SYSTEM MATCHES FOUND FOR "${clean(query)}" // 該当するログが見つかりませんでした<br>
-              TRY TARGETING CODES LIKE 'MIKU' OR 'CREEPY STORY'
-            </div>`;
-        } else {
-          matchedResults.forEach(item => {
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'log-item';
+    <div class="window">
+        <div class="window-header">
+            <span class="window-title">search_results.exe</span>
+            <div class="window-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="window-body">
+            <marquee scrollamount="4">✦ 一癖あるインターネット ✦ search results system ✦ 一癖あるインターネット ✦</marquee>
             
-            let linkHref = "#";
-            if (item.tags.some(tag => ['creepy story', 'horror', 'urban legend', 'scary', '怖い話', '都市伝説'].includes(tag))) {
-              linkHref = "https://miniforce-fanon.fandom.com/wiki/WikiMINIFORCE:THEILLUSIONOFSALVATIONAU/Miniforce_Fanon_Wiki";
+            <h1>nura</h1>
+            <div class="slogan">一癖あるインターネット</div>
+
+            <div id="search-results" class="search-results-area"></div>
+            
+            <div style="margin-top: 25px;">
+                <a href="index.html" class="btn">◁ Back to Index</a>
+            </div>
+
+            <div class="status-bar">
+                <span>status: online</span>
+                <span>hits: 000001</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const searchDatabase = {
+            "hatsune miku": {
+                title: "✦ NotMiku Secret Network Terminal ✦",
+                url: "http://nura.net",
+                desc: `Anomalous entity detected in the sub-layers of nura.exe. Operating outside standard digital parameters.
+                
+                <div style="margin-top: 25px; padding: 15px; background: #2b3d2b; border: 2px dashed #f7b859; color: #e3ffd4;">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div style="animation: bounce 0.4s infinite alternate;">
+                            <img src="notmiku.gif" alt="NotMiku" class="miku-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <span style="display:none; font-size:40px;">🎤</span>
+                        </div>
+                        <div style="flex-grow: 1;">
+                            <div id="miku-text" style="font-size: 13px; font-weight: bold; margin-bottom: 10px;">
+                                Hello! I am NotMiku, a reference-gif! What do you want to ask? (っゝω・)つ
+                            </div>
+                            <div id="miku-options">
+                                <button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px;" onclick="mikuChat(1)">
+                                    How is your life?
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            },
+            "apple pie recipe": {
+                title: "🍏 Grandma's Oldschool Apple Pie 🍏",
+                url: "http://nura.net",
+                desc: "Ingredients: 6 sweet apples, stardust, cinnamon, and 100g of sweet sugar. Bake inside an old desktop machine at 180C."
+            },
+            "neko": {
+                title: "✧ Nyantastic Web Portal ✧",
+                url: "http://nura.net",
+                desc: "Meow! Welcome to the net-space of digital cats. Status: sleeping on the keyboard."
+            },
+            "lookooooooo(✿◠‿◠)": {
+                title: "★ lookooooooo - Ultimate Space ★",
+                url: "http://nura.net",
+                desc: "The true legend and creator of nura.exe interface. Surf the wired, fortune favors the bold!"
+            }
+        };
+
+        const searchItems = Object.keys(searchDatabase);
+
+        function getSearchQuery() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('q');
+        }
+
+        function displayResults() {
+            const query = getSearchQuery();
+            const resultsContainer = document.getElementById('search-results');
+            
+            if (!resultsContainer) return;
+
+            if (!query || query.trim() === "") {
+                resultsContainer.innerHTML = `
+                    <div class="result-title">No Query Specified</div>
+                    <div class="result-desc">Please go back and type something in the search bar.</div>
+                `;
+                return;
             }
 
-            itemDiv.innerHTML = `
-              <a href="${linkHref}" target="_blank" class="log-title">${clean(item.title)}</a>
-              <div class="log-meta">${clean(item.meta)}</div>
-              <div class="log-snippet">${clean(item.snippet)}</div>
-            `;
-            container.appendChild(itemDiv);
-          });
+            const cleanQuery = query.trim().toLowerCase();
+            const matchedKey = searchItems.find(key => key.toLowerCase() === cleanQuery || key.toLowerCase().includes(cleanQuery));
+
+            if (matchedKey && searchDatabase[matchedKey]) {
+                const data = searchDatabase[matchedKey];
+                resultsContainer.innerHTML = `
+                    <div class="result-title">${data.title}</div>
+                    <div class="result-url">${data.url}</div>
+                    <div class="result-desc">${data.desc}</div>
+                `;
+            } else {
+                resultsContainer.innerHTML = `
+                    <div class="result-title">404 - Not Found</div>
+                    <div class="result-url">http://nura.net{encodeURIComponent(query)}</div>
+                    <div class="result-desc">No data found in the wired system for "${query}". Try searching for something else!</div>
+                `;
+            }
         }
-      })
-      .catch(error => {
-        container.innerHTML = `<div class="no-results">(X.X) DATABASE_ERROR // データベースエラー</div>`;
-      });
-  </script>
-</body>
-</html>
+
+        function mikuChat(step) {
+            const textBlock = document.getElementById('miku-text');
+            const optionsBlock = document.getElementById('miku-options');
+
+            if (step === 1) {
+                       function mikuChat(step) {
+            const textBlock = document.getElementById('miku-text');
+            const optionsBlock = document.getElementById('miku-options');
+
+            if (step === 1) {
+                textBlock.innerHTML = `It's fine, but Neko AI has been acting really weird lately...`;
+                optionsBlock.innerHTML = `
+                    <button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px; display: block;" onclick="mikuChat(2)">
+                        Who is Neko?
+                    </button>
+                    <button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px; display: block; background: #ffcbdc;" onclick="mikuChat(3)">
+                        I will go check the search bar... (End chat)
+                    </button>
+                `;
+            } else if (step === 2) {
+                textBlock.innerHTML = `Neko is an AI currently in development, she even has a robotic version. They made her to be perfect but... I saw her sitting on a conveyor belt covered in dynamic matrices, just smiling... it was so creepy...`;
+                optionsBlock.innerHTML = `<button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px;" onclick="mikuChat(4)"> Why don't you tell the management? </button>`;
+            } else if (step === 3) {
+                textBlock.innerHTML = `System: Chat ended. NotMiku is dancing quietly.`;
+                optionsBlock.innerHTML = '';
+            } else if (step === 4) {
+                textBlock.innerHTML = `I tried... but every time I write a bug report, it completely changes into a meaningless pile of 'meow meow', and everyone thinks I'm just joking...`;
+                optionsBlock.innerHTML = `<button class="btn" style="padding: 4px 8px; font-size: 11px; margin-bottom: 5px; background: #ffcbdc;" onclick="mikuChat(3)"> Goodbye </button>`;
+            }
+        }
+
+        window.onload = function() {
+            displayResults();
+        };
