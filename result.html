@@ -13,16 +13,83 @@
       font-family: 'MS Gothic', 'Courier New', monospace;
       margin: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      padding: 40px 20px;
       min-height: 100vh;
-      padding: 20px;
       box-sizing: border-box;
     }
 
-    .main-frame {
+    .nav-header {
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .back-home {
+      color: #cb997e;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .back-home:hover {
+      color: #a3b18a;
+    }
+
+    .user-badge {
+      font-size: 12px;
+      background: #fffdf9;
+      border: 1px solid #b7b7a4;
+      padding: 6px 12px;
+      border-radius: 2px;
+      text-align: right;
+    }
+    .user-bio-text {
+      font-size: 10px;
+      color: #a3b18a;
+      margin-top: 2px;
+    }
+
+    .avatar-vault-box {
+      width: 100%;
+      max-width: 600px;
+      background: #fffdf9;
+      border: 2px dashed #cb997e;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+    .vault-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #cb997e;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    .avatar-selection-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 6px;
+      padding: 5px;
+      background: #fcfaf2;
+    }
+    .avatar-option {
+      font-size: 22px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .avatar-option:hover {
+      background: #ffe3e0;
+      transform: scale(1.1);
+    }
+
+    .results-frame {
+      width: 100%;
+      max-width: 600px;
       background: #fffdf9;
       border: 4px double #b7b7a4; 
       padding: 25px;
@@ -30,187 +97,163 @@
       border-radius: 4px;
       box-shadow: 6px 6px 0px #ddbea9;
     }
-    
-    .header-area {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px dashed #e3d5ca;
-      padding-bottom: 15px;
+
+    .query-header {
+      font-size: 16px;
+      border-bottom: 2px dashed #cb997e;
+      padding-bottom: 10px;
       margin-bottom: 20px;
-    }
-
-    .brand-logo {
-      font-size: 20px;
-      font-weight: bold;
-      color: #a3b18a; 
-      text-decoration: none;
-      text-shadow: 0 0 4px #fff, 0 0 8px #a3b18a;
-    }
-
-    .user-badge {
-      font-size: 11px;
-      background: #f7f9f4;
-      padding: 4px 8px;
-      border: 1px dashed #a3b18a;
-      color: #a3b18a;
-    }
-
-    .search-info {
-      font-size: 12px;
-      margin-bottom: 20px;
-      background: #fcfaf2;
-      padding: 10px;
-      border: 1px solid #cb997e;
     }
 
     .query-text {
-      color: #ff758f;
+      color: #a3b18a;
       font-weight: bold;
     }
 
-    .results-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .result-card {
+    .log-item {
+      background: #f7f9f4;
       border: 1px solid #b7b7a4;
       padding: 15px;
-      background: #fff;
-      box-shadow: 3px 3px 0px #e3d5ca;
-      transition: 0.2s;
+      margin-bottom: 15px;
     }
-
-    .result-card:hover {
+    .log-item:hover {
       border-color: #cb997e;
-      box-shadow: 3px 3px 0px #cb997e;
-      transform: translate(-1px, -1px);
+      background: #fffdf9;
     }
 
-    .result-title {
+    .log-title {
       font-size: 14px;
       font-weight: bold;
       color: #cb997e;
+      text-decoration: none;
+      display: block;
       margin-bottom: 5px;
     }
+    .log-title:hover {
+      text-decoration: underline;
+    }
 
-    .result-snippet {
+    .log-meta {
+      font-size: 11px;
+      color: #a3b18a;
+      margin-bottom: 8px;
+    }
+
+    .log-snippet {
       font-size: 12px;
       line-height: 1.4;
-      color: #6b5b52;
-    }
-
-    .back-btn {
-      display: inline-block;
-      margin-top: 25px;
-      background: #ffe3e0;
-      border: 2px solid #ffb3a7;
-      color: #ff758f;
-      padding: 8px 16px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 12px;
-      text-decoration: none;
-      box-shadow: 3px 3px 0px #ffb3a7;
-    }
-
-    .back-btn:hover {
-      background: #ffb3a7;
-      color: #fff;
-    }
-
-    .back-btn:active {
-      transform: translate(3px, 3px);
-      box-shadow: none;
     }
 
     .no-results {
       text-align: center;
-      padding: 30px 10px;
-      font-size: 13px;
-      color: #b7b7a4;
+      padding: 40px 0;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
 
-  <div class="main-frame">
-    <div class="header-area">
-      <a href="index.html" class="brand-logo">*(o.o)* NURA</a>
-      <div id="user-display" class="user-badge">GUEST</div>
+  <div class="nav-header">
+    <a href="index.html" class="back-home">◀ RETURN TO NURA</a>
+    <div class="user-badge">
+      <div id="user-display">GUEST_MODE</div>
+      <div id="user-bio-display" class="user-bio-text"></div>
+    </div>
+  </div>
+
+  <div class="avatar-vault-box">
+    <div class="vault-title">✦ NURA_AVATAR_VAULT (CLICK TO CHANGE) ✦</div>
+    <div class="avatar-selection-grid" id="avatar-grid"></div>
+  </div>
+
+  <div class="results-frame">
+    <div class="query-header">
+      SEARCH_LOG // TARGET: <span id="target-query" class="query-text">None</span>
     </div>
 
-    <div class="search-info">
-      ✧ LOG_SEARCH_REQUEST: <span id="search-target" class="query-text">None</span>
-    </div>
-
-    <div id="results-container" class="results-list"></div>
-
-    <a href="index.html" class="back-btn">[ <-- GO BACK ]</a>
+    <div id="results-container"></div>
   </div>
 
   <script>
-    const savedUser = localStorage.getItem('nura_username');
-    if (savedUser) {
-      document.getElementById('user-display').textContent = `USER: ${savedUser}`;
+    const emojis = [
+      '🌟','🌙','🧸','🎮','🎧','📟','💿','⚡','🌸','🍦','🍓','🍭','💊','🍧','🎀','🛸','🧪','👾',
+      '💎','🔮','🧿','🎐','🎈','🍟','🍩','🍿','🍮','🍡','🧋','🛼','🛹','🎟️','🛍️','💌','💤','✨',
+      '🍀','🪐','🎨','🎬','🧩','🎉','🕯️','🔑','🗝️','📦','📊','📝','📌','📍','📎','👁️‍🗨️','🖤','🤍',
+      '🤎','💜','💙','💚','💛','🧡','❤️','💖','💝','💟','💌','💤','💢','💣','💥','💦','💨','💫'
+    ];
+
+    function renderUserBadge() {
+      const username = localStorage.getItem('nura_username');
+      const avatar = localStorage.getItem('nura_avatar') || '📟';
+      const bio = localStorage.getItem('nura_bio') || '';
+      
+      if (username) {
+        document.getElementById('user-display').textContent = `${avatar} OPERATOR: ${username.toUpperCase()}`;
+        document.getElementById('user-bio-display').textContent = bio ? `STATUS: ${bio}` : '';
+      }
     }
+    renderUserBadge();
+
+    const avatarGrid = document.getElementById('avatar-grid');
+    emojis.forEach(emoji => {
+      const span = document.createElement('span');
+      span.className = 'avatar-option';
+      span.textContent = emoji;
+      span.addEventListener('click', () => {
+        localStorage.setItem('nura_avatar', emoji);
+        renderUserBadge();
+      });
+      avatarGrid.appendChild(span);
+    });
 
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('q') ? urlParams.get('q').trim().toLowerCase() : '';
-    
-    document.getElementById('search-target').textContent = query ? `"${query}"` : 'empty_target';
-
-    const database = [
-      {
-        keywords: ['hatsune miku', 'miku', 'vocaloid'],
-        title: '✦ LOG_039: Project_Miku.txt',
-        snippet: 'A digital voice echo found inside an old server grid dated 2007. It smells like leeks and glowing neon pixels. She is still singing...'
-      },
-      {
-        keywords: ['creepy story', 'creepy', 'ghost', 'story'],
-        title: '✦ LOG_666: The_Midnight_Modem.log',
-        snippet: 'In 1999, a user connected to a strange terminal called NURA. After midnight, the text turned into moving eyes. The user never logged off.'
-      },
-      {
-        keywords: ['kaomoji', 'emoticon', 'smile'],
-        title: '✦ LOG_101: Ancient_Faces.dat',
-        snippet: 'Collection of forgotten expressions: *(o.o)* ✧ ヘ( ^o^)/ ◌ (X.X) ✿ (｡♥‿♥｡) ◌ (𖦹_𖦹). They hold the raw emotion of the early internet era.'
-      },
-      {
-        keywords: ['cat', 'neko', 'cats'],
-        title: '✦ LOG_002: Neko_Cache.bin',
-        snippet: 'Pixelated paws detected in the memory sector. A tiny spirit cat appears to be sleeping directly on top of your local storage data.'
-      }
-    ];
+    document.getElementById('target-query').textContent = query ? `"${query}"` : 'ALL_LOGS';
 
     const container = document.getElementById('results-container');
+    const globalBannedRegex = /хуй|хуе|хуи|пизд|ебан|ебат|уеб|бля|сук|залуп|мудак|шлюх|нах|член|fuc?k|bitch|shit|ass|cock|dick|cunt|pussy|whore|bastard|nigga|idiot|stupid|baka|クソ|バка|アホ|チンポ|マンコ/vi;
+    function clean(text) { return text.replace(globalBannedRegex, '***'); }
+    const cleanQuery = clean(query);
 
-    const matchedResults = database.filter(item => {
-      return item.keywords.some(keyword => query.includes(keyword) || keyword.includes(query));
-    });
+    fetch('database.json')
+      .then(response => response.json())
+      .then(mockDatabase => {
+        const matchedResults = mockDatabase.filter(item => {
+          if (!cleanQuery) return true;
+          return item.tags.some(tag => tag.includes(cleanQuery)) || 
+                 item.title.toLowerCase().includes(cleanQuery) || 
+                 item.snippet.toLowerCase().includes(cleanQuery);
+        });
 
-    if (query === '') {
-      container.innerHTML = '<div class="no-results">(X.X)<br><br>No request specified.<br>Please return and type something!</div>';
-    } else if (matchedResults.length > 0) {
-      matchedResults.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'result-card';
-        card.innerHTML = `
-          <div class="result-title">${item.title}</div>
-          <div class="result-snippet">${item.snippet}</div>
-        `;
-        container.appendChild(card);
+        if (matchedResults.length === 0) {
+          container.innerHTML = `
+            <div class="no-results">
+              (X._.X)<br><br>
+              NO SYSTEM MATCHES FOUND FOR "${clean(query)}" // 該当するログが見つかりませんでした<br>
+              TRY TARGETING CODES LIKE 'MIKU' OR 'CREEPY STORY'
+            </div>`;
+        } else {
+          matchedResults.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'log-item';
+            
+            let linkHref = "#";
+            if (item.tags.some(tag => ['creepy story', 'horror', 'urban legend', 'scary', '怖い話', '都市伝説'].includes(tag))) {
+              linkHref = "https://miniforce-fanon.fandom.com/wiki/WikiMINIFORCE:THEILLUSIONOFSALVATIONAU/Miniforce_Fanon_Wiki";
+            }
+
+            itemDiv.innerHTML = `
+              <a href="${linkHref}" target="_blank" class="log-title">${clean(item.title)}</a>
+              <div class="log-meta">${clean(item.meta)}</div>
+              <div class="log-snippet">${clean(item.snippet)}</div>
+            `;
+            container.appendChild(itemDiv);
+          });
+        }
+      })
+      .catch(error => {
+        container.innerHTML = `<div class="no-results">(X.X) DATABASE_ERROR // データベースエラー</div>`;
       });
-    } else {
-      container.innerHTML = `
-        <div class="result-card">
-          <div class="result-title">✧ SYSTEM_ALERT: Signal_Lost.err</div>
-          <div class="result-snippet">NURA searched the grid for "${query}" but found only empty noise. Maybe this memory belongs to a future that has not happened yet?</div>
-        </div>
-      `;
-    }
   </script>
 </body>
 </html>
